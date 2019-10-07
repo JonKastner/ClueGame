@@ -1,0 +1,17 @@
+commit 8d56391906677a1bd3ae5977e4c8199207d8b655
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Sun Oct 6 13:03:55 2019 -0600
+
+    Part 2 Complete, all tests pass
+
+commit 6a9d5e1c1a31ea31b4ba4b47806e81c51d49cf85
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 3 11:26:01 2019 -0600
+
+    Part 1 Complete, all tests fail
+
+commit 20298000d8a74549bedc24f1d99d607f3edcdf68
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Tue Oct 1 12:08:33 2019 -0600
+
+    Initial Commit
