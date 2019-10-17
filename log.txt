@@ -1,3 +1,9 @@
+commit 0055183689e5cdaedb205ba83e1f454e2fcebbfa
+Author: Jon <jkastner@mymail.mines.edu>
+Date:   Mon Oct 7 13:37:31 2019 -0600
+
+    Part 3 Complete, all board tests fail
+
 commit 8d56391906677a1bd3ae5977e4c8199207d8b655
 Author: Jonathon Kastner <jkastner@mines.edu>
 Date:   Sun Oct 6 13:03:55 2019 -0600

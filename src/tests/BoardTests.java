@@ -54,11 +54,11 @@ public class BoardTests {
 	@Test
 	public void FourDoorDirections() {
 		// make sure that the cell at (2,5) is a doorway accessible from the right
-		BoardCell room = board.getCellAt(2, 5);
+		BoardCell room = board.getCellAt(5, 2);
 		assertTrue(room.isDoorway());
 		assertEquals(DoorDirection.RIGHT, room.getDoorDirection());
 		// make sure that the cell at (0,6) is a doorway accessible from below
-		room = board.getCellAt(0, 6);
+		room = board.getCellAt(6, 0);
 		assertTrue(room.isDoorway());
 		assertEquals(DoorDirection.DOWN, room.getDoorDirection());
 		// make sure that the cell at (4,11) is a doorway accessible from the left
@@ -70,10 +70,10 @@ public class BoardTests {
 		assertTrue(room.isDoorway());
 		assertEquals(DoorDirection.UP, room.getDoorDirection());
 		// Test a cell that is not a door
-		room = board.getCellAt(4, 14);
+		room = board.getCellAt(14, 4);
 		assertFalse(room.isDoorway());	
 		// Ensure that walkways are not read in as doors
-		BoardCell cell = board.getCellAt(12, 7);
+		BoardCell cell = board.getCellAt(7, 12);
 		assertFalse(cell.isDoorway());		
 	}
 	
@@ -97,7 +97,7 @@ public class BoardTests {
 	public void testRoomInitials() {
 		// Test first cell in some rooms
 		assertEquals('O', board.getCellAt(0, 0).getInitial());
-		assertEquals('L', board.getCellAt(0, 4).getInitial());
+		assertEquals('W', board.getCellAt(0, 4).getInitial());
 		assertEquals('B', board.getCellAt(10, 0).getInitial());
 		// Test last cell in some rooms
 		assertEquals('H', board.getCellAt(23, 15).getInitial());
