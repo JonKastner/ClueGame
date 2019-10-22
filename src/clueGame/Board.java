@@ -193,6 +193,10 @@ public class Board {
 		}
 	}
 	
+	// calcTargets method
+	public void calcTargets(int i, int j, int k) {
+	}
+	
 	// setters and getters
 	public void setConfigFiles(String boardConfigFile, String roomConfigFile) {
 		this.boardConfigFile = boardConfigFile;
@@ -210,6 +214,12 @@ public class Board {
 	public clueGame.BoardCell getCellAt(int i, int j) {
 		return board[i][j];
 	}
-	
+	public Set<clueGame.BoardCell> getAdjList(int i, int j){
+		//return adjMatrix.get(board[i][j]);
+		return null;
+	}
+	public Set<clueGame.BoardCell> getTargets() {
+		return null;
+	}
 	
 }
