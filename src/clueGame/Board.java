@@ -105,6 +105,7 @@ public class Board {
 		for (int i = 0; i < numColumns; i++) {
 			if (arr[i].length() > 1) {
 				DoorDirection d;
+				// switch case to set the door direction
 				switch(arr[i].charAt(1)) {
 				case 'D':
 					d = DoorDirection.DOWN;
@@ -145,6 +146,7 @@ public class Board {
 			for (int i = 0; i < numColumns; i++) {
 				if (arr[i].length() > 1) {
 					DoorDirection d;
+					// switch case to set the door direction
 					switch(arr[i].charAt(1)) {
 					case 'D':
 						d = DoorDirection.DOWN;
@@ -164,7 +166,7 @@ public class Board {
 					// if the cell has a doorway, use the second constructor
 					board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0), d);
 				} else {
-					// otherwise use the basic constructor
+					// otherwise use the base constructor
 					board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0));
 				}
 			}
