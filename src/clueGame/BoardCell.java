@@ -9,16 +9,19 @@ public class BoardCell {
 	private int row;
 	private int column;
 	private char initial;
-	private char door = ' ';
+	private DoorDirection door;
 	
-	// constructor setting row and column to integer parameters
+	// constructor setting row and column to integer parameters, and initial to z
 	public BoardCell(int x, int y, char z) {
 		row = x;
 		column = y;
 		initial = z;
+		// This constructor is for non-door cells, so their door direction is NONE
+		door = DoorDirection.NONE;
 	}
 	
-	public BoardCell(int x, int y, char z, char d) {
+	// constructor specifically for cells that have doors
+	public BoardCell(int x, int y, char z, DoorDirection d) {
 		row = x;
 		column = y;
 		initial = z;
@@ -27,42 +30,38 @@ public class BoardCell {
 	
 	// isWalkway check method
 	public boolean isWalkway() {
-		return false;
+		if (this.initial == 'W') {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	// isRoom check method
 	public boolean isRoom() {
-		return false;
+		if ((this.initial != 'W') && (this.initial != 'X')) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	// isDoorway check method
 	public boolean isDoorway() {
-		if ((door != ' ') && (door != 'N')) {
+		if (this.door != DoorDirection.NONE) {
 			return true;
-		} else {
+		}
+		else {
 			return false;
 		}
 	}
 
 	// getters for initial and door direction
 	public Object getDoorDirection() {
-		if (door == 'U') {
-			return DoorDirection.UP;
-		}
-		else if (door == 'L') {
-			return DoorDirection.LEFT;
-		}
-		else if (door == 'R') {
-			return DoorDirection.RIGHT;
-		}
-		else if (door == 'D') {
-			return DoorDirection.DOWN;
-		}
-		else {
-			return DoorDirection.NONE;
-		}
+		return door;
 	}
-
 	public Object getInitial() {
 		return initial;
 	}

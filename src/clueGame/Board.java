@@ -38,10 +38,11 @@ public class Board {
 		
 	// initialize method
 	public void initialize() {
-		// try to load the files, catch format exceptions
+		// try to load the files and calculate adjacencies, catch format exceptions
 		try {
 			loadRoomConfig();
 			loadBoardConfig();
+			calcAdjacencies();
 		} catch (BadConfigFormatException e) {
 			System.out.println("File Configuration Error!");
 		}
@@ -103,8 +104,27 @@ public class Board {
 		// add the boardcells to the 2D array
 		for (int i = 0; i < numColumns; i++) {
 			if (arr[i].length() > 1) {
-				board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0), arr[i].charAt(1));
+				DoorDirection d;
+				switch(arr[i].charAt(1)) {
+				case 'D':
+					d = DoorDirection.DOWN;
+					break;
+				case 'U':
+					d = DoorDirection.UP;
+					break;
+				case 'R':
+					d = DoorDirection.RIGHT;
+					break;
+				case 'L':
+					d = DoorDirection.LEFT;
+					break;
+				default:
+					d = DoorDirection.NONE;
+				}
+				// if the cell has a doorway, use the second constructor
+				board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0), d);
 			} else {
+				// otherwise use the basic constructor
 				board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0));
 			}
 		}
@@ -124,33 +144,131 @@ public class Board {
 			}
 			for (int i = 0; i < numColumns; i++) {
 				if (arr[i].length() > 1) {
-					board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0), arr[i].charAt(1));
+					DoorDirection d;
+					switch(arr[i].charAt(1)) {
+					case 'D':
+						d = DoorDirection.DOWN;
+						break;
+					case 'U':
+						d = DoorDirection.UP;
+						break;
+					case 'R':
+						d = DoorDirection.RIGHT;
+						break;
+					case 'L':
+						d = DoorDirection.LEFT;
+						break;
+					default:
+						d = DoorDirection.NONE;
+					}
+					// if the cell has a doorway, use the second constructor
+					board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0), d);
 				} else {
+					// otherwise use the basic constructor
 					board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0));
 				}
 			}
+			// add 1 to numRows
 			numRows++;
 		}
 	}
 	
 	// calcAdjacencies method
 	public void calcAdjacencies() {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
+		adjMatrix = new HashMap<clueGame.BoardCell, Set<clueGame.BoardCell>>();
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numColumns; j++) {
 				// make a new set of cells
 				Set<clueGame.BoardCell> adjs = new HashSet<clueGame.BoardCell>();
 				// add the adjacent cells if they are inside of the grid-range
-				if (i+1 <= 3) {
-					adjs.add(board[i+1][j]);
+				// If the current cell is a walkway
+				if (board[i][j].isWalkway()) {
+					if (i + 1 < numRows) {
+						// Deal with cell below if it exists
+						// If the cell is a walkway, add it to adjacency list regardless
+						if (board[i+1][j].isWalkway()) {
+							adjs.add(board[i+1][j]);
+						}
+						// If the cell is a room, check to make sure that it is a doorway
+						else if (board[i+1][j].isRoom()) {
+							if (board[i+1][j].isDoorway()) {
+								// If the doorway opens up, add to adjacency list
+								if (board[i+1][j].getDoorDirection() == DoorDirection.UP) {
+									adjs.add(board[i+1][j]);
+								}
+							}
+						}
+					}
+					if (i - 1 >= 0) {
+						// Deal with cell above if it exists
+						// If the cell is a walkway, add it to adjacency list regardless
+						if (board[i-1][j].isWalkway()) {
+							adjs.add(board[i-1][j]);
+						}
+						// If the cell is a room, check to make sure that it is a doorway
+						else if (board[i-1][j].isRoom()) {
+							if (board[i-1][j].isDoorway()) {
+								// If the doorway opens down, add to adjacency list
+								if (board[i-1][j].getDoorDirection() == DoorDirection.DOWN) {
+									adjs.add(board[i-1][j]);
+								}
+							}
+						}
+					}
+					if (j + 1 < numColumns) {
+						// Deal with cell to the right if it exists
+						// If the cell is a walkway, add it to adjacency list regardless
+						if (board[i][j+1].isWalkway()) {
+							adjs.add(board[i][j+1]);
+						}
+						// If the cell is a room, check to make sure that it is a doorway
+						else if (board[i][j+1].isRoom()) {
+							if (board[i][j+1].isDoorway()) {
+								// If the doorway opens to the left, add to adjacency list
+								if (board[i][j+1].getDoorDirection() == DoorDirection.LEFT) {
+									adjs.add(board[i][j+1]);
+								}
+							}
+						}
+					}
+					if (j - 1 >= 0) {
+						// Deal with cell to the left if it exists
+						// If the cell is a walkway, add it to adjacency list regardless
+						if (board[i][j-1].isWalkway()) {
+							adjs.add(board[i][j-1]);
+						}
+						// If the cell is a room, check to make sure that it is a doorway
+						else if (board[i][j-1].isRoom()) {
+							if (board[i][j-1].isDoorway()) {
+								// If the doorway opens to the right, add to adjacency list
+								if (board[i][j-1].getDoorDirection() == DoorDirection.RIGHT) {
+									adjs.add(board[i][j-1]);
+								}
+							}
+						}
+					}
 				}
-				if (i-1 >= 0) {
-					adjs.add(board[i-1][j]);
-				}
-				if (j+1 <= 3) {
-					adjs.add(board[i][j+1]);
-				}
-				if (j-1 >= 0) {
-					adjs.add(board[i][j-1]);
+				// If the current cell is inside of a room
+				else if (board[i][j].isRoom()) {
+					// The cell can only have adjacent cells if it is also a doorway
+					if (board[i][j].isDoorway()) {
+						// If the door is accessible from above, add the cell above
+						if (board[i][j].getDoorDirection() == DoorDirection.UP) {
+							adjs.add(board[i-1][j]);
+						}
+						// If the door is accessible from below, add the cell below
+						else if (board[i][j].getDoorDirection() == DoorDirection.DOWN) {
+							adjs.add(board[i+1][j]);
+						}
+						// If the cell is accessible from the left, add the cell to the left
+						else if (board[i][j].getDoorDirection() == DoorDirection.LEFT) {
+							adjs.add(board[i][j-1]);
+						}
+						// If the cell is accessible from the right, add the cell to the right
+						else if (board[i][j].getDoorDirection() == DoorDirection.RIGHT) {
+							adjs.add(board[i][j+1]);
+						}
+					}
 				}
 				// add the set to the map where the origin cell is the key
 				adjMatrix.put(board[i][j], adjs);
@@ -159,14 +277,14 @@ public class Board {
 	}
 	
 	// calcTargets method
-	public void calcTargets(clueGame.BoardCell cell, int pathLength) {
+	public void calcTargets(int row, int col, int pathLength) {
 		// initialize the visitedCells and targetCells sets
 		visited = new HashSet<clueGame.BoardCell>();
 		targets = new HashSet<clueGame.BoardCell>();
 		// add the start cell to the visited list
-		visited.add(cell);
+		visited.add(board[row][col]);
 		// find all of the targets for the start cell
-		findAllTargets(cell, pathLength);
+		findAllTargets(board[row][col], pathLength);
 	}
 	
 	// findAllTargets method
@@ -181,7 +299,7 @@ public class Board {
 			// if path length is not 1, call the function recursively with pathlength-1
 			else {
 				visited.add(a);
-				if (pathLength == 1) {
+				if ((pathLength == 1)||(a.isDoorway())) {
 					targets.add(a);
 				}
 				else {
@@ -191,10 +309,6 @@ public class Board {
 				visited.remove(a);
 			}
 		}
-	}
-	
-	// calcTargets method
-	public void calcTargets(int i, int j, int k) {
 	}
 	
 	// setters and getters
@@ -215,11 +329,10 @@ public class Board {
 		return board[i][j];
 	}
 	public Set<clueGame.BoardCell> getAdjList(int i, int j){
-		//return adjMatrix.get(board[i][j]);
-		return null;
+		return adjMatrix.get(board[i][j]);
 	}
 	public Set<clueGame.BoardCell> getTargets() {
-		return null;
+		return targets;
 	}
 	
 }

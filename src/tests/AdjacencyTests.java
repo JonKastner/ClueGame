@@ -18,7 +18,7 @@ public class AdjacencyTests {
 	// Before method to set up the board
 	private static Board board;
 	@Before
-	public static void setUp() {
+	public void setUp() {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueMap.csv", "RoomLegend.txt");		
 		board.initialize();
@@ -150,6 +150,7 @@ public class AdjacencyTests {
 	// Test targets for numSteps = 1
 	@Test
 	public void TestTargetsOneStep() {
+		// Test 1 step starting at (15,8)
 		board.calcTargets(15, 8, 1);
 		Set<BoardCell> targets = board.getTargets();
 		assertEquals(4, targets.size());
@@ -158,6 +159,7 @@ public class AdjacencyTests {
 		assert(targets.contains(board.getCellAt(15, 7)));
 		assert(targets.contains(board.getCellAt(15, 9)));
 		
+		// Test 1 step starting at (9,14)
 		board.calcTargets(9, 14, 1);
 		targets = board.getTargets();
 		assertEquals(3, targets.size());
@@ -169,6 +171,7 @@ public class AdjacencyTests {
 	// Test targets for numSteps = 3
 	@Test
 	public void TestTargetsThreeSteps() {
+		// Test 3 steps starting at (6,18)
 		board.calcTargets(6, 18, 3);
 		Set<BoardCell> targets = board.getTargets();
 		assertEquals(9, targets.size());
@@ -182,6 +185,7 @@ public class AdjacencyTests {
 		assert(targets.contains(board.getCellAt(8, 17)));
 		assert(targets.contains(board.getCellAt(7, 16)));
 		
+		// Test 3 steps starting at (8,10)
 		board.calcTargets(8, 10, 3);
 		targets = board.getTargets();
 		assertEquals(11, targets.size());
@@ -231,13 +235,14 @@ public class AdjacencyTests {
 		assert(targets.contains(board.getCellAt(4, 10)));
 		assert(targets.contains(board.getCellAt(3, 9)));
 		assert(targets.contains(board.getCellAt(1, 9)));
-		// this is the doorway cell
+		// (2,8) is the doorway cell
 		assert(targets.contains(board.getCellAt(2, 8)));
 	}
 	
 	// Test targets when exiting a room
 	@Test
 	public void TestExitRoom() {
+		// Testing the creation of targets starting at the door-cell (20,9) with 2 steps
 		board.calcTargets(20, 9, 2);
 		Set<BoardCell> targets = board.getTargets();
 		assertEquals(3, targets.size());

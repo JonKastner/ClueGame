@@ -1,3 +1,15 @@
+commit 548c75f6fda0026be5e7f057046277bcdc6a7ad6
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Tue Oct 22 14:46:49 2019 -0600
+
+    C16A1 Complete, Adjacency Tests Fail
+
+commit 319dea59e18a0fec2dafa2a1abca6626742651e1
+Author: Jon <jkastner@mymail.mines.edu>
+Date:   Wed Oct 16 23:22:47 2019 -0600
+
+    C13A2 Complete, all board and exception tests pass
+
 commit 0055183689e5cdaedb205ba83e1f454e2fcebbfa
 Author: Jon <jkastner@mymail.mines.edu>
 Date:   Mon Oct 7 13:37:31 2019 -0600
