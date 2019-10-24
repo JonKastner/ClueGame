@@ -36,7 +36,7 @@ public class Board {
 		return theInstance;
 	}
 		
-	// initialize method
+	// initialize method performs the loadRoomConfig and loadBoardConfig methods. Then it populates adjMatrix
 	public void initialize() {
 		// try to load the files and calculate adjacencies, catch format exceptions
 		try {
