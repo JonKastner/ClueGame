@@ -56,25 +56,26 @@ public class Board {
 		// try to open the file
 		try {
 			scan = new Scanner(in);
+			String line = "";
+			// get each line, split it up, trim off leading/trailing whitespace
+			while(scan.hasNextLine()) {
+				line = scan.nextLine();
+				String[] arr = line.split(",", 0);
+				for (int i = 0; i < arr.length; i++) {
+					arr[i] = arr[i].trim();
+				}
+				if ((arr.length > 3) || (arr.length == 0)) {
+					throw new BadConfigFormatException("Error: Incorrect legend file format!");
+				}
+				else if ((!arr[2].equals("Card")) && (!arr[2].equals("Other"))){
+					throw new BadConfigFormatException("Error: Incorrect legend file format!");
+				}
+				// add to legend map
+				legend.put(arr[0].charAt(0), arr[1]);
+			}
+			
 		} catch (FileNotFoundException e) {
 			System.out.println("File does not exist!");
-		}
-		String line = "";
-		// get each line, split it up, trim off leading/trailing whitespace
-		while(scan.hasNextLine()) {
-			line = scan.nextLine();
-			String[] arr = line.split(",", 0);
-			for (int i = 0; i < arr.length; i++) {
-				arr[i] = arr[i].trim();
-			}
-			if ((arr.length > 3) || (arr.length == 0)) {
-				throw new BadConfigFormatException("Error: Incorrect legend file format!");
-			}
-			else if ((!arr[2].equals("Card")) && (!arr[2].equals("Other"))){
-				throw new BadConfigFormatException("Error: Incorrect legend file format!");
-			}
-			// add to legend map
-			legend.put(arr[0].charAt(0), arr[1]);
 		}
 	}
 	
