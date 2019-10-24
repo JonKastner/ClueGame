@@ -11,21 +11,19 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import experiment.BoardCell;
-
 public class Board {
 
 	// initialize member variables
 	public static final int MAX_BOARD_SIZE = 50;
 	private int numRows;
 	private int numColumns;
-	private clueGame.BoardCell[][] board;
+	private BoardCell[][] board;
 	private Map<Character, String> legend;
-	private Map<clueGame.BoardCell, Set<clueGame.BoardCell>> adjMatrix;
-	private Set<clueGame.BoardCell> targets;
+	private Map<BoardCell, Set<BoardCell>> adjMatrix;
+	private Set<BoardCell> targets;
 	private String boardConfigFile;
 	private String roomConfigFile;
-	private Set<clueGame.BoardCell> visited;
+	private Set<BoardCell> visited;
 	
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -80,7 +78,7 @@ public class Board {
 	
 	// loadBoardConfig method
 	public void loadBoardConfig() throws BadConfigFormatException {
-		board = new clueGame.BoardCell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
+		board = new BoardCell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
 		numRows = 0;
 		File in = new File(boardConfigFile);
 		Scanner scan = null;
@@ -123,11 +121,11 @@ public class Board {
 					d = DoorDirection.NONE;
 				}
 				// if the cell has a doorway, use the second constructor
-				board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0), d);
+				board[numRows][i] = new BoardCell(numRows, i, arr[i].charAt(0), d);
 			} 
 			else {
 				// otherwise use the basic constructor
-				board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0));
+				board[numRows][i] = new BoardCell(numRows, i, arr[i].charAt(0));
 			}
 		}
 		numRows++;
@@ -165,11 +163,11 @@ public class Board {
 						d = DoorDirection.NONE;
 					}
 					// if the cell has a doorway, use the second constructor
-					board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0), d);
+					board[numRows][i] = new BoardCell(numRows, i, arr[i].charAt(0), d);
 				} 
 				else {
 					// otherwise use the base constructor
-					board[numRows][i] = new clueGame.BoardCell(numRows, i, arr[i].charAt(0));
+					board[numRows][i] = new BoardCell(numRows, i, arr[i].charAt(0));
 				}
 			}
 			// add 1 to numRows
@@ -179,11 +177,11 @@ public class Board {
 	
 	// calcAdjacencies method
 	public void calcAdjacencies() {
-		adjMatrix = new HashMap<clueGame.BoardCell, Set<clueGame.BoardCell>>();
+		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
 				// make a new set of cells
-				Set<clueGame.BoardCell> adjs = new HashSet<clueGame.BoardCell>();
+				Set<BoardCell> adjs = new HashSet<BoardCell>();
 				// add the adjacent cells if they are inside of the grid-range
 				// If the current cell is a walkway
 				if (board[i][j].isWalkway()) {
@@ -283,8 +281,8 @@ public class Board {
 	// calcTargets method
 	public void calcTargets(int row, int col, int pathLength) {
 		// initialize the visitedCells and targetCells sets
-		visited = new HashSet<clueGame.BoardCell>();
-		targets = new HashSet<clueGame.BoardCell>();
+		visited = new HashSet<BoardCell>();
+		targets = new HashSet<BoardCell>();
 		// add the start cell to the visited list
 		visited.add(board[row][col]);
 		// find all of the targets for the start cell
@@ -292,9 +290,9 @@ public class Board {
 	}
 	
 	// findAllTargets method
-	public void findAllTargets(clueGame.BoardCell startCell, int pathLength) {
+	public void findAllTargets(BoardCell startCell, int pathLength) {
 		// for each cell in the startCell's adjacent list
-		for (clueGame.BoardCell a : adjMatrix.get(startCell)) {
+		for (BoardCell a : adjMatrix.get(startCell)) {
 			// if you've already visited the cell, next iteration of loop
 			if (visited.contains(a)) {
 				continue;
@@ -329,13 +327,13 @@ public class Board {
 	public int getNumColumns() {
 		return numColumns;
 	}
-	public clueGame.BoardCell getCellAt(int i, int j) {
+	public BoardCell getCellAt(int i, int j) {
 		return board[i][j];
 	}
-	public Set<clueGame.BoardCell> getAdjList(int i, int j){
+	public Set<BoardCell> getAdjList(int i, int j){
 		return adjMatrix.get(board[i][j]);
 	}
-	public Set<clueGame.BoardCell> getTargets() {
+	public Set<BoardCell> getTargets() {
 		return targets;
 	}
 	
