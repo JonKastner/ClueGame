@@ -52,10 +52,9 @@ public class Board {
 	public void loadRoomConfig() throws BadConfigFormatException {
 		legend = new HashMap<Character, String>();
 		File in = new File(roomConfigFile);
-		Scanner scan = null;
 		// try to open the file
 		try {
-			scan = new Scanner(in);
+			Scanner scan = new Scanner(in);
 			String line = "";
 			// get each line, split it up, trim off leading/trailing whitespace
 			while(scan.hasNextLine()) {

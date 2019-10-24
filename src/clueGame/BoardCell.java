@@ -9,7 +9,7 @@ public class BoardCell {
 	private int row;
 	private int column;
 	private char initial;
-	private DoorDirection door;
+	private DoorDirection doorDir;
 	
 	// constructor setting row and column to integer parameters, and initial to z
 	public BoardCell(int x, int y, char z) {
@@ -17,7 +17,7 @@ public class BoardCell {
 		column = y;
 		initial = z;
 		// This constructor is for non-door cells, so their door direction is NONE
-		door = DoorDirection.NONE;
+		doorDir = DoorDirection.NONE;
 	}
 	
 	// constructor specifically for cells that have doors
@@ -25,7 +25,7 @@ public class BoardCell {
 		row = x;
 		column = y;
 		initial = z;
-		door = d;
+		doorDir = d;
 	}
 	
 	// isWalkway check method
@@ -50,7 +50,7 @@ public class BoardCell {
 	
 	// isDoorway check method
 	public boolean isDoorway() {
-		if (this.door != DoorDirection.NONE) {
+		if (this.doorDir != DoorDirection.NONE) {
 			return true;
 		}
 		else {
@@ -60,7 +60,7 @@ public class BoardCell {
 
 	// getters for initial and door direction
 	public Object getDoorDirection() {
-		return door;
+		return doorDir;
 	}
 	public Object getInitial() {
 		return initial;
