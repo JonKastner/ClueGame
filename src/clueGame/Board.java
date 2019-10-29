@@ -24,6 +24,10 @@ public class Board {
 	private String boardConfigFile;
 	private String roomConfigFile;
 	private Set<BoardCell> visited;
+	private Solution theAnswer;
+	private Set<Card> cards;
+	private Set<Player> players;
+	private Set<String> weapons;
 	
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -313,6 +317,24 @@ public class Board {
 		}
 	}
 	
+	public void loadConfigFiles() {
+		cards = new HashSet<Card>();
+		players = new HashSet<Player>();
+		weapons = new HashSet<String>();
+	}
+	
+	public void selectAnswer() {
+		theAnswer = new Solution();
+	}
+	
+	public Card handleSuggestion() {
+		return null;
+	}
+	
+	public boolean checkAccusation(Solution accusation) {
+		return false;
+	}
+	
 	// setters and getters
 	public void setConfigFiles(String boardConfigFile, String roomConfigFile) {
 		this.boardConfigFile = boardConfigFile;
@@ -335,6 +357,17 @@ public class Board {
 	}
 	public Set<BoardCell> getTargets() {
 		return targets;
+	}
+	
+	// Getters and Setters used for testing Player, Weapon, and Deck creation/loading
+	public Set<Player> getPeople(){
+		return players;
+	}
+	public Set<String> getWeapons(){
+		return weapons;
+	}
+	public Set<Card> getCards(){
+		return cards;
 	}
 	
 }
