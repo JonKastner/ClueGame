@@ -1,3 +1,6 @@
+// Authors: Jonathon Kastner and Gavin Webster
+// GameSetup JUnit Test Class
+
 package tests;
 
 import clueGame.*;
@@ -15,7 +18,9 @@ import org.junit.Test;
 
 public class gameSetupTests {
 
+	// initialize the board
 	private static Board board;
+	// Before method to set up the board and call appropriate functions
 	@Before
 	public void setUp() {
 		board = board.getInstance();
@@ -24,6 +29,7 @@ public class gameSetupTests {
 		board.loadConfigFiles();
 	}
 	
+	// Test loading the players
 	@Test
 	public void testLoadPeople() {
 		ArrayList<Player> list = new ArrayList<Player>();
@@ -60,6 +66,7 @@ public class gameSetupTests {
 		assert(p instanceof ComputerPlayer);
 	}
 	
+	// Test Creating/Loading all of the cards
 	@Test
 	public void testLoadCreateCards() {
 		Set<Card> deck = new HashSet<Card>();
@@ -92,7 +99,7 @@ public class gameSetupTests {
 		assert(contain);
 		contain = false;
 		
-		// pick a room, check to make sure that they are in the deck
+		// pick a room, check to make sure that it is in the deck
 		c = new Card("Conservatory", CardType.ROOM);
 		for (Card card : deck) {
 			if (card.getName().equals(c.getName())){
@@ -102,7 +109,7 @@ public class gameSetupTests {
 		assert(contain);
 		contain = false;
 		
-		// pick a weapon, check to make sure that they are in the deck
+		// pick a weapon, check to make sure that it is in the deck
 		c = new Card("Gun", CardType.WEAPON);
 		for (Card card : deck) {
 			if (card.getName().equals(c.getName())){
@@ -112,6 +119,7 @@ public class gameSetupTests {
 		assert(contain);
 	}
 	
+	// Test dealing the cards, and creating the solution
 	@Test
 	public void testDealCards() {
 		ArrayList<Player> playerList = new ArrayList<Player>();
@@ -137,10 +145,12 @@ public class gameSetupTests {
 		for (Card c : deck) {
 			int count = 0;
 			for (Player p : playerList) {
+				// If the card is in a player's hand, increment count
 				if (p.getHand().contains(c)) {
 					count++;
 				}
 			}
+			// If the card is part of the solution, increment count
 			if ((c.getName().equals(board.getAnswer().room)) || (c.getName().equals(board.getAnswer().person)) || (c.getName().equals(board.getAnswer().weapon))) {
 				count++;
 			}

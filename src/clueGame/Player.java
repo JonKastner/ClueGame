@@ -1,3 +1,6 @@
+// Authors: Jonathon Kastner and Gavin Webster
+// Player Parent Class
+
 package clueGame;
 
 import java.awt.Color;
@@ -12,6 +15,7 @@ public abstract class Player {
 	private Set<Card> myCards;
 	private Set<Card> seenCards;
 	
+	// constructor initializing all of the variable to appropriate values or parameters
 	Player(String s, int r, int c, Color clr){
 		playerName = s;
 		row = r;
@@ -21,6 +25,7 @@ public abstract class Player {
 		seenCards = new HashSet<Card>();
 	}
 	
+	// addCard function adds the parameterized Card to the Player's myCards Set
 	public void addCard(Card c) {
 		myCards.add(c);
 	}

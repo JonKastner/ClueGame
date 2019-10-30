@@ -1,3 +1,6 @@
+// Authors: Jonathon Kastner and Gavin Webster
+// Card Class
+
 package clueGame;
 
 public class Card {
@@ -5,14 +8,15 @@ public class Card {
 	private String cardName;
 	private CardType cardType;
 	
+	// constructor that sets card name and type
 	public Card(String s, CardType c){
 		cardName = s;
 		cardType = c;
 	}
 	
-	public boolean equals() {
+	/*public boolean equals() {
 		return false;
-	}
+	}*/
 	
 	// getter for testing purposes only
 	public CardType getType() {

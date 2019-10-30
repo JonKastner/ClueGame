@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class Board {
 
@@ -33,7 +32,7 @@ public class Board {
 	private Set<Card> cards;
 	private Set<Card> dealtCards;
 	private ArrayList<Player> players;
-	private Set<String> weapons;
+	//private Set<String> weapons;
 	private ArrayList<Card> deck;
 	
 	// variable used for singleton pattern
@@ -57,7 +56,7 @@ public class Board {
 		}
 	}
 	
-	// loadRoomConfig method
+	// loadRoomConfig method creates the legend and all of the room cards, adding them to the deck
 	public void loadRoomConfig() throws BadConfigFormatException {
 		cards = new HashSet<Card>();
 		legend = new HashMap<Character, String>();
@@ -330,18 +329,20 @@ public class Board {
 		}
 	}
 	
+	// loadConfigFiles method reads in the people and weapons files and create cards for them, adding them to the deck
+	// Also adds all of the players to the players ArrayList
 	public void loadConfigFiles() {
 		// Initialize empty sets and File objects
 		//cards = new HashSet<Card>();
 		players = new ArrayList<Player>();
-		weapons = new HashSet<String>();
+		//weapons = new HashSet<String>();
 		dealtCards = new HashSet<Card>();
 		String line = "";
 		String[] arr;
 		File pFile = new File("CluePeople.txt");
 		File wFile = new File("ClueWeapons.txt");
-		File rFile = new File("RoomLegend.txt");
 		// Load Files, Create cards, Add cards to deck
+		// try-catch for FileNotFound Exceptions
 		try {
 			// Start with people (Players)
 			Scanner scan = new Scanner(pFile);
@@ -358,17 +359,18 @@ public class Board {
 					ComputerPlayer temp = new ComputerPlayer(arr[0], Integer.parseInt(arr[3]), Integer.parseInt(arr[4]), convertColor(arr[1]));
 					players.add(temp);
 				}
+				// create the cards and add to the deck
 				Card c = new Card(arr[0], CardType.PERSON);
 				cards.add(c);
 			}
-			// Next deal with weapons
+			// Next deal with weapons, create cards and add to the deck
 			scan = new Scanner(wFile);
 			while (scan.hasNextLine()) {
 				line = scan.nextLine();
 				Card c = new Card(line, CardType.WEAPON);
 				cards.add(c);
 			}
-			// full deck of cards has been created
+			// full deck of cards has been created, copy into the deck arrayList for dealing
 			deck = new ArrayList<Card>(cards);
 			// Call selectAnswer method to pick the solution from the deck of cards
 			selectAnswer();
@@ -378,8 +380,11 @@ public class Board {
 					Random rand = new Random();
 					int index = Math.abs(rand.nextInt() % deck.size());
 					Card c = deck.get(index);
+					// give card to player
 					p.addCard(c);
+					// remove card from dealing deck
 					deck.remove(c);
+					// add card to the set of dealt cards
 					dealtCards.add(c);
 				}
 			}
@@ -388,6 +393,7 @@ public class Board {
 		}
 	}
 	
+	// String -> Color converter provided in assignment PDF
 	public Color convertColor(String strColor) {
 		 Color color;
 		 try {
@@ -401,17 +407,21 @@ public class Board {
 		}
 
 	
+	// selectAnswer method picks 3 cards for the solution before dealing the other cards to players
 	public void selectAnswer() {
 		theAnswer = new Solution();
-		// Choose a room, person, and weapon card at random and assign to the solution
+		
+		// Choose a room card at random, add it to the solution
 		ArrayList<Card> subDeck = new ArrayList<Card>(getRoomCards());
 		Random rand = new Random();
 		int randomNum = Math.abs(rand.nextInt() % subDeck.size());
 		Card c = subDeck.get(randomNum);
 		theAnswer.room = c.getName();
+		// also remove from dealing deck and add to dealt cards
 		deck.remove(c);
 		dealtCards.add(c);
 		
+		// choose a person card at random, add it to the solution
 		subDeck = new ArrayList<Card>(getPlayerCards());
 		randomNum = Math.abs(rand.nextInt() % subDeck.size());
 		c = subDeck.get(randomNum);
@@ -419,6 +429,7 @@ public class Board {
 		deck.remove(c);
 		dealtCards.add(c);
 		
+		// choose a weapon card at random, add it to the solution
 		subDeck = new ArrayList<Card>(getWeaponCards());
 		randomNum = Math.abs(rand.nextInt() % subDeck.size());
 		c = subDeck.get(randomNum);
@@ -429,12 +440,10 @@ public class Board {
 	
 	public Card handleSuggestion() {
 		return null;
-		//TODO
 	}
 	
 	public boolean checkAccusation(Solution accusation) {
 		return false;
-		//TODO
 	}
 	
 	// setters and getters
@@ -464,9 +473,6 @@ public class Board {
 	// Getters and Setters used for testing Player, Weapon, and Deck creation/loading
 	public ArrayList<Player> getPeople(){
 		return players;
-	}
-	public Set<String> getWeapons(){
-		return weapons;
 	}
 	public Set<Card> getCards(){
 		return cards;
