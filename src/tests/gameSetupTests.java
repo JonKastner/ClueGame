@@ -60,7 +60,27 @@ public class gameSetupTests {
 	
 	@Test
 	public void testLoadCreateCards() {
-		//TODO
+		Set<Card> deck = new HashSet<Card>();
+		Set<Card> subDeck = new HashSet<Card>();
+		
+		deck = board.getCards();
+		assertEquals(21, deck.size());
+		
+		subDeck = board.getPlayerCards();
+		assertEquals(6, subDeck.size());
+		
+		subDeck = board.getWeaponCards();
+		assertEquals(6, subDeck.size());
+		
+		subDeck = board.getRoomCards();
+		assertEquals(9, subDeck.size());
+		
+		Card c = new Card("Colonel Mustard", CardType.PERSON);
+		assert(deck.contains(c));
+		c = new Card("Conservatory", CardType.ROOM);
+		assert(deck.contains(c));
+		c = new Card("Gun", CardType.WEAPON);
+		assert(deck.contains(c));
 	}
 	
 	@Test

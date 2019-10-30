@@ -431,5 +431,32 @@ public class Board {
 	public Set<Card> getCards(){
 		return cards;
 	}
+	public Set<Card> getPlayerCards(){
+		Set<Card> result = new HashSet<Card>();
+		for (Card c : cards) {
+			if (c.getType() == CardType.PERSON) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+	public Set<Card> getWeaponCards(){
+		Set<Card> result = new HashSet<Card>();
+		for (Card c : cards) {
+			if (c.getType() == CardType.WEAPON) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+	public Set<Card> getRoomCards(){
+		Set<Card> result = new HashSet<Card>();
+		for (Card c : cards) {
+			if (c.getType() == CardType.ROOM) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
 	
 }
