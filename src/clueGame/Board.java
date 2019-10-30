@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
@@ -30,8 +31,10 @@ public class Board {
 	private Set<BoardCell> visited;
 	private Solution theAnswer;
 	private Set<Card> cards;
+	private Set<Card> dealtCards;
 	private ArrayList<Player> players;
 	private Set<String> weapons;
+	private ArrayList<Card> deck;
 	
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -332,6 +335,7 @@ public class Board {
 		//cards = new HashSet<Card>();
 		players = new ArrayList<Player>();
 		weapons = new HashSet<String>();
+		dealtCards = new HashSet<Card>();
 		String line = "";
 		String[] arr;
 		File pFile = new File("CluePeople.txt");
@@ -364,10 +368,21 @@ public class Board {
 				Card c = new Card(line, CardType.WEAPON);
 				cards.add(c);
 			}
+			// full deck of cards has been created
+			deck = new ArrayList<Card>(cards);
 			// Call selectAnswer method to pick the solution from the deck of cards
-			//selectAnswer();
+			selectAnswer();
 			// Deal the remaining cards randomly to each player (3 cards per player)
-			//TODO this
+			for (int i = 0; i < 3; i++) {
+				for (Player p : players) {
+					Random rand = new Random();
+					int index = Math.abs(rand.nextInt() % deck.size());
+					Card c = deck.get(index);
+					p.addCard(c);
+					deck.remove(c);
+					dealtCards.add(c);
+				}
+			}
 		} catch (FileNotFoundException e) {
 			System.out.println("One or more input files do not exist!");
 		}
@@ -388,8 +403,28 @@ public class Board {
 	
 	public void selectAnswer() {
 		theAnswer = new Solution();
-		//TODO NEED MORE HERE
 		// Choose a room, person, and weapon card at random and assign to the solution
+		ArrayList<Card> subDeck = new ArrayList<Card>(getRoomCards());
+		Random rand = new Random();
+		int randomNum = Math.abs(rand.nextInt() % subDeck.size());
+		Card c = subDeck.get(randomNum);
+		theAnswer.room = c.getName();
+		deck.remove(c);
+		dealtCards.add(c);
+		
+		subDeck = new ArrayList<Card>(getPlayerCards());
+		randomNum = Math.abs(rand.nextInt() % subDeck.size());
+		c = subDeck.get(randomNum);
+		theAnswer.person = c.getName();
+		deck.remove(c);
+		dealtCards.add(c);
+		
+		subDeck = new ArrayList<Card>(getWeaponCards());
+		randomNum = Math.abs(rand.nextInt() % subDeck.size());
+		c = subDeck.get(randomNum);
+		theAnswer.weapon = c.getName();
+		deck.remove(c);
+		dealtCards.add(c);
 	}
 	
 	public Card handleSuggestion() {
@@ -462,6 +497,12 @@ public class Board {
 			}
 		}
 		return result;
+	}
+	public Set<Card> getDealtCards(){
+		return dealtCards;
+	}
+	public Solution getAnswer() {
+		return theAnswer;
 	}
 	
 }

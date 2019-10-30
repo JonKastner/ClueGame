@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.util.HashSet;
 import java.util.Set;
 
 public abstract class Player {
@@ -16,13 +17,19 @@ public abstract class Player {
 		row = r;
 		column = c;
 		color = clr;
+		myCards = new HashSet<Card>();
+		seenCards = new HashSet<Card>();
+	}
+	
+	public void addCard(Card c) {
+		myCards.add(c);
 	}
 	
 	public Card disproveSuggestion(Solution suggestion) {
 		return null;
 	}
 	
-	// Getter and Setters for testing Player creation only
+	// Getter and Setters for testing purposes only
 	public String getName() {
 		return playerName;
 	}
@@ -34,5 +41,8 @@ public abstract class Player {
 	}
 	public Color getColor() {
 		return color;
+	}
+	public Set<Card> getHand() {
+		return myCards;
 	}
 }

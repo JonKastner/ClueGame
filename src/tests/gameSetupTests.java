@@ -114,6 +114,38 @@ public class gameSetupTests {
 	
 	@Test
 	public void testDealCards() {
-		//TODO
+		ArrayList<Player> playerList = new ArrayList<Player>();
+		Set<Card> deck = new HashSet<Card>();
+		playerList = board.getPeople();
+		deck = board.getDealtCards();
+		
+		// make sure all cards are dealt
+		assertEquals(21, deck.size());
+		
+		// all player should have the same number of cards
+		int cardCount = playerList.get(0).getHand().size();
+		boolean sameNumber = true;
+		for (Player p : playerList) {
+			if (!(cardCount - p.getHand().size() <= 1 && cardCount - p.getHand().size() >= -1)) {
+				sameNumber = false;
+			}
+		}
+		assert(sameNumber);
+		
+		// no duplicate cards dealt to different players
+		deck = board.getCards();
+		for (Card c : deck) {
+			int count = 0;
+			for (Player p : playerList) {
+				if (p.getHand().contains(c)) {
+					count++;
+				}
+			}
+			if ((c.getName().equals(board.getAnswer().room)) || (c.getName().equals(board.getAnswer().person)) || (c.getName().equals(board.getAnswer().weapon))) {
+				count++;
+			}
+			assertEquals(1, count);
+		}
+		
 	}
 }
