@@ -56,6 +56,7 @@ public class Board {
 	
 	// loadRoomConfig method
 	public void loadRoomConfig() throws BadConfigFormatException {
+		cards = new HashSet<Card>();
 		legend = new HashMap<Character, String>();
 		File in = new File(roomConfigFile);
 		// try to open the file
@@ -77,6 +78,11 @@ public class Board {
 				}
 				// add to legend map
 				legend.put(arr[0].charAt(0), arr[1]);
+				// create room card, add to deck
+				if (arr[2].equals("Card")) {
+					Card c = new Card(arr[1], CardType.ROOM);
+					cards.add(c);
+				}
 			}
 			
 		} catch (FileNotFoundException e) {
@@ -323,7 +329,7 @@ public class Board {
 	
 	public void loadConfigFiles() {
 		// Initialize empty sets and File objects
-		cards = new HashSet<Card>();
+		//cards = new HashSet<Card>();
 		players = new ArrayList<Player>();
 		weapons = new HashSet<String>();
 		String line = "";
@@ -348,19 +354,18 @@ public class Board {
 					ComputerPlayer temp = new ComputerPlayer(arr[0], Integer.parseInt(arr[3]), Integer.parseInt(arr[4]), convertColor(arr[1]));
 					players.add(temp);
 				}
+				Card c = new Card(arr[0], CardType.PERSON);
+				cards.add(c);
 			}
 			// Next deal with weapons
-			/*scan = new Scanner(wFile);
+			scan = new Scanner(wFile);
 			while (scan.hasNextLine()) {
-				//TODO
-			}
-			// Finally deal with Rooms
-			scan = new Scanner(rFile);
-			while (scan.hasNextLine()) {
-				//TODO
+				line = scan.nextLine();
+				Card c = new Card(line, CardType.WEAPON);
+				cards.add(c);
 			}
 			// Call selectAnswer method to pick the solution from the deck of cards
-			selectAnswer();*/
+			//selectAnswer();
 			// Deal the remaining cards randomly to each player (3 cards per player)
 			//TODO this
 		} catch (FileNotFoundException e) {

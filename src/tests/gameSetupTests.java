@@ -19,6 +19,8 @@ public class gameSetupTests {
 	@Before
 	public void setUp() {
 		board = board.getInstance();
+		board.setConfigFiles("ClueMap.csv", "RoomLegend.txt");
+		board.initialize();
 		board.loadConfigFiles();
 	}
 	
@@ -63,24 +65,51 @@ public class gameSetupTests {
 		Set<Card> deck = new HashSet<Card>();
 		Set<Card> subDeck = new HashSet<Card>();
 		
+		// make sure there are 21 cards in the deck
 		deck = board.getCards();
 		assertEquals(21, deck.size());
 		
+		// 6 person cards
 		subDeck = board.getPlayerCards();
 		assertEquals(6, subDeck.size());
 		
+		// 6 weapon cards
 		subDeck = board.getWeaponCards();
 		assertEquals(6, subDeck.size());
 		
+		// 9 room cards
 		subDeck = board.getRoomCards();
 		assertEquals(9, subDeck.size());
 		
+		// pick a person, check to make sure that they are in the deck
+		boolean contain = false;
 		Card c = new Card("Colonel Mustard", CardType.PERSON);
-		assert(deck.contains(c));
+		for (Card card : deck) {
+			if (card.getName().equals(c.getName())){
+				contain = true;
+			}
+		}
+		assert(contain);
+		contain = false;
+		
+		// pick a room, check to make sure that they are in the deck
 		c = new Card("Conservatory", CardType.ROOM);
-		assert(deck.contains(c));
+		for (Card card : deck) {
+			if (card.getName().equals(c.getName())){
+				contain = true;
+			}
+		}
+		assert(contain);
+		contain = false;
+		
+		// pick a weapon, check to make sure that they are in the deck
 		c = new Card("Gun", CardType.WEAPON);
-		assert(deck.contains(c));
+		for (Card card : deck) {
+			if (card.getName().equals(c.getName())){
+				contain = true;
+			}
+		}
+		assert(contain);
 	}
 	
 	@Test
