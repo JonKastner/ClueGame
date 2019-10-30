@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,42 +24,47 @@ public class gameSetupTests {
 	
 	@Test
 	public void testLoadPeople() {
-		Set<Player> list = new HashSet<Player>();
+		ArrayList<Player> list = new ArrayList<Player>();
 		list = board.getPeople();
 		
 		// Test to make sure there are 6 players
 		assertEquals(list.size(), 6);
-		ArrayList<Player> list2 = new ArrayList<Player>(list);
 		
 		// Test the first player's values (computer player)
-		Player p = list2.get(0);
-		assertEquals(p.getName(), "Colonel Mustard");
-		assertEquals(p.getRow(), 0);
-		assertEquals(p.getCol(), 4);
-		assertEquals(p.getColor(), Color.YELLOW);
+		// Also tests to make sure that they are a ComputerPlayer
+		Player p = list.get(0);
+		assertEquals("Colonel Mustard", p.getName());
+		assertEquals(0, p.getRow());
+		assertEquals(4, p.getCol());
+		assertEquals(Color.YELLOW, p.getColor());
+		assert(p instanceof HumanPlayer);
 		
 		// Test the human player's values
-		p = list2.get(3);
-		assertEquals(p.getName(), "Mrs. Peacock");
-		assertEquals(p.getRow(), 17);
-		assertEquals(p.getCol(), 23);
-		assertEquals(p.getColor(), Color.BLUE);
+		// Also tests to make sure that they are a HumanPlayer
+		p = list.get(3);
+		assertEquals("Mrs. Peacock", p.getName());
+		assertEquals(17, p.getRow());
+		assertEquals(23, p.getCol());
+		assertEquals(Color.BLUE, p.getColor());
+		assert(p instanceof ComputerPlayer);
 		
 		// Test the last player's values (computer player)
-		p = list2.get(5);
-		assertEquals(p.getName(), "Professor Plum");
-		assertEquals(p.getRow(), 0);
-		assertEquals(p.getCol(), 19);
-		assertEquals(p.getColor(), Color.MAGENTA);
+		// Also tests to make sure that they are a ComputerPlayer
+		p = list.get(5);
+		assertEquals("Professor Plum", p.getName());
+		assertEquals(0, p.getRow());
+		assertEquals(19, p.getCol());
+		assertEquals(Color.MAGENTA, p.getColor());
+		assert(p instanceof ComputerPlayer);
 	}
 	
 	@Test
 	public void testLoadCreateCards() {
-		
+		//TODO
 	}
 	
 	@Test
 	public void testDealCards() {
-		
+		//TODO
 	}
 }

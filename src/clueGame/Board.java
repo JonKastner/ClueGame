@@ -3,13 +3,17 @@
 
 package clueGame;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Board {
 
@@ -26,7 +30,7 @@ public class Board {
 	private Set<BoardCell> visited;
 	private Solution theAnswer;
 	private Set<Card> cards;
-	private Set<Player> players;
+	private ArrayList<Player> players;
 	private Set<String> weapons;
 	
 	// variable used for singleton pattern
@@ -318,21 +322,79 @@ public class Board {
 	}
 	
 	public void loadConfigFiles() {
+		// Initialize empty sets and File objects
 		cards = new HashSet<Card>();
-		players = new HashSet<Player>();
+		players = new ArrayList<Player>();
 		weapons = new HashSet<String>();
+		String line = "";
+		String[] arr;
+		File pFile = new File("CluePeople.txt");
+		File wFile = new File("ClueWeapons.txt");
+		File rFile = new File("RoomLegend.txt");
+		// Load Files, Create cards, Add cards to deck
+		try {
+			// Start with people (Players)
+			Scanner scan = new Scanner(pFile);
+			while (scan.hasNextLine()) {
+				line = scan.nextLine();
+				arr = line.split(", ", 0);
+				// If the player is a human player
+				if (arr[2].equals("Human")) {
+					HumanPlayer temp = new HumanPlayer(arr[0], Integer.parseInt(arr[3]), Integer.parseInt(arr[4]), convertColor(arr[1]));
+					players.add(temp);
+				}
+				// If the player is a computer player
+				else if (arr[2].equals("Computer")) {
+					ComputerPlayer temp = new ComputerPlayer(arr[0], Integer.parseInt(arr[3]), Integer.parseInt(arr[4]), convertColor(arr[1]));
+					players.add(temp);
+				}
+			}
+			// Next deal with weapons
+			/*scan = new Scanner(wFile);
+			while (scan.hasNextLine()) {
+				//TODO
+			}
+			// Finally deal with Rooms
+			scan = new Scanner(rFile);
+			while (scan.hasNextLine()) {
+				//TODO
+			}
+			// Call selectAnswer method to pick the solution from the deck of cards
+			selectAnswer();*/
+			// Deal the remaining cards randomly to each player (3 cards per player)
+			//TODO this
+		} catch (FileNotFoundException e) {
+			System.out.println("One or more input files do not exist!");
+		}
 	}
+	
+	public Color convertColor(String strColor) {
+		 Color color;
+		 try {
+		 // We can use reflection to convert the string to a color
+		 Field field = Class.forName("java.awt.Color").getField(strColor.trim());
+		 color = (Color)field.get(null);
+		 } catch (Exception e) {
+		 color = null; // Not defined
+		 }
+		 return color;
+		}
+
 	
 	public void selectAnswer() {
 		theAnswer = new Solution();
+		//TODO NEED MORE HERE
+		// Choose a room, person, and weapon card at random and assign to the solution
 	}
 	
 	public Card handleSuggestion() {
 		return null;
+		//TODO
 	}
 	
 	public boolean checkAccusation(Solution accusation) {
 		return false;
+		//TODO
 	}
 	
 	// setters and getters
@@ -360,7 +422,7 @@ public class Board {
 	}
 	
 	// Getters and Setters used for testing Player, Weapon, and Deck creation/loading
-	public Set<Player> getPeople(){
+	public ArrayList<Player> getPeople(){
 		return players;
 	}
 	public Set<String> getWeapons(){

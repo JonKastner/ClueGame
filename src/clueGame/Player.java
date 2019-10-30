@@ -11,11 +11,18 @@ public abstract class Player {
 	private Set<Card> myCards;
 	private Set<Card> seenCards;
 	
+	Player(String s, int r, int c, Color clr){
+		playerName = s;
+		row = r;
+		column = c;
+		color = clr;
+	}
+	
 	public Card disproveSuggestion(Solution suggestion) {
 		return null;
 	}
 	
-	// Getter and Setters for testing Player creation
+	// Getter and Setters for testing Player creation only
 	public String getName() {
 		return playerName;
 	}
