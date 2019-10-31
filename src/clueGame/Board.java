@@ -443,7 +443,12 @@ public class Board {
 	}
 	
 	public boolean checkAccusation(Solution accusation) {
-		return false;
+		if ((theAnswer.person.equals(accusation.person)) && (theAnswer.room.equals(accusation.room)) && (theAnswer.weapon.equals(accusation.weapon))) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	// setters and getters
