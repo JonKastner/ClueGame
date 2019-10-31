@@ -8,9 +8,12 @@ import java.util.Set;
 
 public class ComputerPlayer extends Player {
 	
+	private char recentRoom;
+	
 	// Constructor calling the parent constructor
-	ComputerPlayer(String s, int r, int c, Color clr){
+	public ComputerPlayer(String s, int r, int c, Color clr){
 		super(s, r, c, clr);
+		recentRoom = ' ';
 	}
 	
 	public BoardCell pickLocation(Set<BoardCell> targets) {
@@ -23,5 +26,9 @@ public class ComputerPlayer extends Player {
 	
 	public void createSuggestion() {
 		
+	}
+	
+	public void setRecentRoom(char c) {
+		recentRoom = c;
 	}
 }
