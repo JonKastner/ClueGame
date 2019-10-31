@@ -4,6 +4,8 @@
 package clueGame;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Set;
 
 public class ComputerPlayer extends Player {
@@ -17,7 +19,18 @@ public class ComputerPlayer extends Player {
 	}
 	
 	public BoardCell pickLocation(Set<BoardCell> targets) {
-		return null;
+		ArrayList targetList = new ArrayList<BoardCell>(targets);
+		BoardCell target = null;
+		for (BoardCell c : targets) {
+			if ((c.isRoom()) && (!c.getInitial().equals(recentRoom))) {
+				target = c;
+				return target;
+			}
+		}
+		Random rand = new Random();
+		int index = Math.abs(rand.nextInt() % targets.size());
+		target = (BoardCell) targetList.get(index);
+		return target;
 	}
 	
 	public void makeAccustion() {
