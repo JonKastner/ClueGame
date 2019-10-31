@@ -510,5 +510,10 @@ public class Board {
 	public Solution getAnswer() {
 		return theAnswer;
 	}
+	public void setAnswer(String p, String r, String w) {
+		theAnswer.person = p;
+		theAnswer.room = r;
+		theAnswer.weapon = w;
+	}
 	
 }
