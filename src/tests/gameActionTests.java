@@ -219,6 +219,7 @@ public class gameActionTests {
 	}
 	
 	// Test the player disproving a suggestion when they have multiple matching cards
+	@Test
 	public void TestDisproveSuggestionMultipleMatches() {
 		// create a computer player with 3 cards in their hand
 		ComputerPlayer player = new ComputerPlayer("p", 6, 6, Color.BLUE);
@@ -256,6 +257,7 @@ public class gameActionTests {
 	}
 	
 	// Test the player disproving a suggestion when they have no matching cards
+	@Test
 	public void TestDisproveSuggestionNoMatches() {
 		// create a computer player with 3 cards in their hand
 		ComputerPlayer player = new ComputerPlayer("p", 6, 6, Color.BLUE);
