@@ -33,12 +33,12 @@ public class ComputerPlayer extends Player {
 		return target;
 	}
 	
-	public void makeAccustion() {
-		
+	public Solution makeAccusation() {
+		return null;
 	}
 	
-	public void createSuggestion() {
-		
+	public Solution createSuggestion() {
+		return null;
 	}
 	
 	public void setRecentRoom(char c) {

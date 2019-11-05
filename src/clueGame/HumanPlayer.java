@@ -8,7 +8,7 @@ import java.awt.Color;
 public class HumanPlayer extends Player {
 	
 	// constructor calling the parent constructor
-	HumanPlayer(String s, int r, int c, Color clr){
+	public HumanPlayer(String s, int r, int c, Color clr){
 		super(s, r, c, clr);
 	}
 }

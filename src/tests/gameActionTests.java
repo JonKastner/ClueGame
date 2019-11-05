@@ -276,5 +276,251 @@ public class gameActionTests {
 		assert(player.disproveSuggestion(suggestion) == null);
 	}
 	
+	// Test handling a suggestion that nobody can disprove
+	@Test
+	public void TestHandleSuggestionNobodyDisproves() {
+		// make a suggestion
+		Solution suggestion = new Solution();
+		suggestion.person = "Miss Scarlet";
+		suggestion.room = "Conservatory";
+		suggestion.weapon = "Rope";
+		// change the game's answer to match the suggestion
+		board.setAnswer("Miss Scarlet", "Conservatory", "Rope");
+		// remove the matching cards from the players' hands so they can't disprove the suggestion
+		for (Player p : board.getPeople()) {
+			for (Card c : p.getHand()) {
+				// look through everyone's cards. If the card matches the suggestion, remove it from the player's hand
+				if (c.getName() == suggestion.person || c.getName() == suggestion.room || c.getName() == suggestion.weapon) {
+					p.getHand().remove(c);
+				}
+			}
+		}
+		// make sure that the board returns null when handling the suggestion
+		assert(board.handleSuggestion(board.getPeople().get(0), suggestion) == null);
+	}
 	
+	// Test handling a suggestion that only the accuser can disprove
+	@Test
+	public void TestHandleSuggestionOnlyAccuserDisproves() {
+		// pick a computer player for the test, they will be the accuser
+		Player player = null;
+		for (Player p : board.getPeople()) {
+			if (p instanceof ComputerPlayer) {
+				player = p;
+				break;
+			}
+		}
+		// make a suggestion that only they can disprove
+		// do this by picking a card from their hand, using that in the suggestion, and setting the other two values of the suggestion to the game's solution values
+		Solution suggestion = new Solution();
+		Card c = player.getHand().get(0);
+		if (c.getType() == CardType.PERSON) {
+			suggestion.person = c.getName();
+			suggestion.room = board.getAnswer().room;
+			suggestion.weapon = board.getAnswer().weapon;
+		}
+		else if (c.getType() == CardType.ROOM) {
+			suggestion.room = c.getName();
+			suggestion.person = board.getAnswer().person;
+			suggestion.weapon = board.getAnswer().weapon;
+		}
+		else if (c.getType() == CardType.WEAPON) {
+			suggestion.weapon = c.getName();
+			suggestion.person = board.getAnswer().person;
+			suggestion.room = board.getAnswer().room;
+		}
+		// make sure that the board handles the suggestion by returning null
+		assert(board.handleSuggestion(player, suggestion) == null);
+	}
+	
+	// Test handling a suggestion that only the user can disprove
+	@Test
+	public void TestHandleSuggestionOnlyUserDisproves() {
+		// pick the human player, they will be only one who can disprove
+		Player player = null;
+		for (Player p : board.getPeople()) {
+			if (p instanceof HumanPlayer) {
+				player = p;
+				break;
+			}
+		}
+		// make another player to act as the accuser, only for the test
+		Player accuser = new ComputerPlayer("CP1", 6, 6, Color.BLUE);
+		// make a suggestion that only they can disprove
+		// do this by picking a card from their hand, using that in the suggestion, and setting the other two values of the suggestion to the game's solution values
+		Solution suggestion = new Solution();
+		Card c = player.getHand().get(0);
+		if (c.getType() == CardType.PERSON) {
+			suggestion.person = c.getName();
+			suggestion.room = board.getAnswer().room;
+			suggestion.weapon = board.getAnswer().weapon;
+		}
+		else if (c.getType() == CardType.ROOM) {
+			suggestion.room = c.getName();
+			suggestion.person = board.getAnswer().person;
+			suggestion.weapon = board.getAnswer().weapon;
+		}
+		else if (c.getType() == CardType.WEAPON) {
+			suggestion.weapon = c.getName();
+			suggestion.person = board.getAnswer().person;
+			suggestion.room = board.getAnswer().room;
+		}
+		// make sure that the board handles the suggestion by returning the matching card from the user's hand
+		assert(board.handleSuggestion(accuser, suggestion) == c);
+	}
+	
+	// Test handling the user's suggestion that only the user can disprove
+	@Test
+	public void TestHandleUserSuggestionOnlyUserDisproves() {
+		// pick the human player for the test, they will be the accuser
+		Player player = null;
+		for (Player p : board.getPeople()) {
+			if (p instanceof HumanPlayer) {
+				player = p;
+				break;
+			}
+		}
+		// make a suggestion that only they can disprove
+		// do this by picking a card from their hand, using that in the suggestion, and setting the other two values of the suggestion to the game's solution values
+		Solution suggestion = new Solution();
+		Card c = player.getHand().get(0);
+		if (c.getType() == CardType.PERSON) {
+			suggestion.person = c.getName();
+			suggestion.room = board.getAnswer().room;
+			suggestion.weapon = board.getAnswer().weapon;
+		}
+		else if (c.getType() == CardType.ROOM) {
+			suggestion.room = c.getName();
+			suggestion.person = board.getAnswer().person;
+			suggestion.weapon = board.getAnswer().weapon;
+		}
+		else if (c.getType() == CardType.WEAPON) {
+			suggestion.weapon = c.getName();
+			suggestion.person = board.getAnswer().person;
+			suggestion.room = board.getAnswer().room;
+		}
+		// make sure that the board handles the suggestion by returning null
+		assert(board.handleSuggestion(player, suggestion) == null);
+	}
+	
+	// Test handling a suggestion that multiple computer players can disprove
+	@Test
+	public void TestHandleSuggestionMultipleComputerDisproves() {
+		Player player1 = null;
+		Player player2 = null;
+		// pick the two computer players that can disprove
+		for (Player p : board.getPeople()) {
+			if (p instanceof ComputerPlayer) {
+				player1 = p;
+				break;
+			}
+		}
+		for (Player p : board.getPeople()) {
+			if (p instanceof ComputerPlayer && p != player1) {
+				player2 = p;
+				break;
+			}
+		}
+		// make the accuser the player in the list after player2
+		Player accuser = board.getPeople().get(board.getPeople().indexOf(player2) + 1);
+		// make a test suggestion that the two players can disprove
+		// do this by picking a card from each of the others' hands, using that in the suggestion, and setting the other value of the suggestion to the game's solution value
+		Solution suggestion = new Solution();
+		Card c1 = null;
+		Card c2 = null;
+		// search through each player's cards together to find two cards that don't share the same type
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (player1.getHand().get(i).getType() != player2.getHand().get(j).getType()) {
+					c1 = player1.getHand().get(i);
+					c2 = player2.getHand().get(j);
+					i = 3;
+					j = 3;
+				}
+			}
+		}
+		// set the suggestion values to the two cards' values
+		if (c1.getType() == CardType.PERSON) {
+			suggestion.person = c1.getName();
+		}
+		else if (c1.getType() == CardType.ROOM) {
+			suggestion.room = c1.getName();
+		}
+		else if (c1.getType() == CardType.WEAPON) {
+			suggestion.weapon = c1.getName();
+		}
+		if (c2.getType() == CardType.PERSON) {
+			suggestion.person = c2.getName();
+		}
+		else if (c2.getType() == CardType.ROOM) {
+			suggestion.room = c2.getName();
+		}
+		else if (c2.getType() == CardType.WEAPON) {
+			suggestion.weapon = c2.getName();
+		}
+		// make sure that the board handles the suggestion by returning the card from the next player in the list
+		// the card should be returned by player 1, since player 1 comes before player 2 in the list
+		assert(board.handleSuggestion(accuser, suggestion) == c1);
+	}
+	
+	// Test handling a suggestion that multiple people can disprove, one being the user
+	@Test
+	public void TestHandleSuggestionMultipleUserDisproves() {
+		Player player1 = null;
+		Player user = null;
+		// pick the user, they will disprove
+		for (Player p : board.getPeople()) {
+			if (p instanceof ComputerPlayer) {
+				player1 = p;
+				break;
+			}
+		}
+		// the computer player that can also disprove is the player after the user in the list
+		if (board.getPeople().indexOf(user) == board.getPeople().size() - 1) {
+			player1 = board.getPeople().get(0);
+		}
+		else {
+			player1 = board.getPeople().get(board.getPeople().indexOf(user) + 1);
+		}
+		// make the accuser the player in the list after player2
+		Player accuser = board.getPeople().get(board.getPeople().indexOf(player1) + 1);
+		// make a test suggestion that the two players can disprove
+		// do this by picking a card from each of the others' hands, using that in the suggestion, and setting the other value of the suggestion to the game's solution value
+		Solution suggestion = new Solution();
+		Card c1 = null;
+		Card c2 = null;
+		// search through each player's cards together to find two cards that don't share the same type
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (player1.getHand().get(i).getType() != user.getHand().get(j).getType()) {
+					c1 = player1.getHand().get(i);
+					c2 = user.getHand().get(j);
+					i = 3;
+					j = 3;
+				}
+			}
+		}
+		// set the suggestion values to the two cards' values
+		if (c1.getType() == CardType.PERSON) {
+			suggestion.person = c1.getName();
+		}
+		else if (c1.getType() == CardType.ROOM) {
+			suggestion.room = c1.getName();
+		}
+		else if (c1.getType() == CardType.WEAPON) {
+			suggestion.weapon = c1.getName();
+		}
+		if (c2.getType() == CardType.PERSON) {
+			suggestion.person = c2.getName();
+		}
+		else if (c2.getType() == CardType.ROOM) {
+			suggestion.room = c2.getName();
+		}
+		else if (c2.getType() == CardType.WEAPON) {
+			suggestion.weapon = c2.getName();
+		}
+		// make sure that the board handles the suggestion by returning the card from the next player in the list
+		// the card should be returned by the user, since the user comes before player1 in the list
+		assert(board.handleSuggestion(accuser, suggestion) == c2);
+	}
 }

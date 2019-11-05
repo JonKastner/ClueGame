@@ -14,7 +14,7 @@ public abstract class Player {
 	private int row;
 	private int column;
 	private Color color;
-	private Set<Card> myCards;
+	private ArrayList<Card> myCards;
 	private Set<Card> seenCards;
 	
 	// constructor initializing all of the variable to appropriate values or parameters
@@ -23,7 +23,7 @@ public abstract class Player {
 		row = r;
 		column = c;
 		color = clr;
-		myCards = new HashSet<Card>();
+		myCards = new ArrayList<Card>();
 		seenCards = new HashSet<Card>();
 	}
 	
@@ -71,7 +71,7 @@ public abstract class Player {
 	public Color getColor() {
 		return color;
 	}
-	public Set<Card> getHand() {
+	public ArrayList<Card> getHand() {
 		return myCards;
 	}
 }

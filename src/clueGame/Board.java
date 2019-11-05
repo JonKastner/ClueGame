@@ -438,7 +438,7 @@ public class Board {
 		dealtCards.add(c);
 	}
 	
-	public Card handleSuggestion() {
+	public Card handleSuggestion(Player accuser, Solution suggestion) {
 		return null;
 	}
 	
