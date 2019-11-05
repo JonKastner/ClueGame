@@ -389,7 +389,6 @@ public class gameActionTests {
 			suggestion.room = board.getAnswer().room;
 		}
 		// make sure that the board handles the suggestion by returning null
-		Card d = board.handleSuggestion(player,  suggestion);
 		assert(board.handleSuggestion(player, suggestion) == null);
 	}
 	
@@ -512,5 +511,111 @@ public class gameActionTests {
 		// make sure that the board handles the suggestion by returning the card from the next player in the list
 		// the card should be returned by the user, since the user comes before player1 in the list
 		assert(board.handleSuggestion(accuser, suggestion) == c2);
+	}
+	
+	// Test creating a suggestion making sure that the room matches the current location
+	@Test
+	public void TestCreateSuggestionRoomMatches() {
+		// create a computer player for the test at point (0,0)
+		// (0,0) is inside of the Office 'O'
+		ComputerPlayer player = new ComputerPlayer("CP1", 0, 0, Color.BLUE);
+		String roomName = player.createSuggestion().room;
+		assert(roomName == "Office");
+	}
+	
+	// Tests creating a suggestion where only one weapon is not seen, chooses that weapon
+	@Test
+	public void TestCreateSuggestionOneWeaponSelection() {
+		// create a computer player for the test at point (0,0)
+		// (0,0) is inside of the Office 'O'
+		ComputerPlayer player = new ComputerPlayer("CP1", 0, 0, Color.BLUE);
+		// add all weapons except one to the player's seenCards list
+		player.addSeen(new Card("Rope", CardType.WEAPON));
+		player.addSeen(new Card("Gun", CardType.WEAPON));
+		player.addSeen(new Card("Knife", CardType.WEAPON));
+		player.addSeen(new Card("Poison", CardType.WEAPON));
+		player.addSeen(new Card("Shovel", CardType.WEAPON));
+		// make sure that the weapon selected is the only one not seen
+		String weaponName = player.createSuggestion().weapon;
+		assert(weaponName == "Crowbar");
+	}
+	
+	// Tests creating a suggestion where only one person is not seen, chooses that person
+	@Test
+	public void TestCreateSuggestionOnePersonSelection() {
+		// create a computer player for the test at point (0,0)
+		// (0,0) is inside of the Office 'O'
+		ComputerPlayer player = new ComputerPlayer("CP1", 0, 0, Color.BLUE);
+		// add all weapons except one to the player's seenCards list
+		player.addSeen(new Card("Colonel Mustard", CardType.PERSON));
+		player.addSeen(new Card("Miss Scarlet", CardType.PERSON));
+		player.addSeen(new Card("Mr. Green", CardType.PERSON));
+		player.addSeen(new Card("Mrs. Peacock", CardType.PERSON));
+		player.addSeen(new Card("Mrs. White", CardType.PERSON));
+		// make sure that the weapon selected is the only one not seen
+		String personName = player.createSuggestion().person;
+		assert(personName == "Professor Plum");
+	}
+	
+	// Tests creating a suggestion where weapon is randomly selected
+	@Test
+	public void TestCreateSuggestionRandomWeaponSelection() {
+		// create a computer player for the test at point (0,0)
+		// (0,0) is inside of the Office 'O'
+		ComputerPlayer player = new ComputerPlayer("CP1", 0, 0, Color.BLUE);
+		// add all weapons except three to the player's seenCards list
+		player.addSeen(new Card("Rope", CardType.WEAPON));
+		player.addSeen(new Card("Gun", CardType.WEAPON));
+		player.addSeen(new Card("Knife", CardType.WEAPON));
+		boolean poison = false;
+		boolean shovel = false;
+		boolean crowbar = false;
+		// run 25 trials, make sure that each boolean is set to true by the end of the trials to prove random selection
+		for (int i = 0; i < 25; i++) {
+			String weaponName = player.createSuggestion().weapon;
+			if (weaponName.equals("Poison")) {
+				poison = true;
+			}
+			else if (weaponName.equals("Shovel")) {
+				shovel = true;
+			}
+			else if (weaponName.equals("Crowbar")) {
+				crowbar = true;
+			}
+		}
+		assert(poison);
+		assert(shovel);
+		assert(crowbar);
+	}
+	
+	// Tests creating a suggestion where person is randomly selected
+	@Test
+	public void TestCreateSuggestionRandomPersonSelection() {
+		// create a computer player for the test at point (0,0)
+		// (0,0) is inside of the Office 'O'
+		ComputerPlayer player = new ComputerPlayer("CP1", 0, 0, Color.BLUE);
+		// add all weapons except three to the player's seenCards list
+		player.addSeen(new Card("Colonel Mustard", CardType.PERSON));
+		player.addSeen(new Card("Miss Scarlet", CardType.PERSON));
+		player.addSeen(new Card("Mr. Green", CardType.PERSON));
+		boolean mrsWhite = false;
+		boolean profPlum = false;
+		boolean mrsPeacock = false;
+		// run 25 trials, make sure that each boolean is set to true by the end of the trials to prove random selection
+		for (int i = 0; i < 25; i++) {
+			String personName = player.createSuggestion().person;
+			if (personName.equals("Mrs. White")) {
+				mrsWhite = true;
+			}
+			else if (personName.equals("Professor Plum")) {
+				profPlum = true;
+			}
+			else if (personName.equals("Mrs. Peacock")) {
+				mrsPeacock = true;
+			}
+		}
+		assert(mrsWhite);
+		assert(profPlum);
+		assert(mrsPeacock);
 	}
 }

@@ -382,6 +382,7 @@ public class Board {
 					Card c = deck.get(index);
 					// give card to player
 					p.addCard(c);
+					p.addSeen(c);
 					// remove card from dealing deck
 					deck.remove(c);
 					// add card to the set of dealt cards

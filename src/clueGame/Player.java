@@ -15,7 +15,7 @@ public abstract class Player {
 	private int column;
 	private Color color;
 	private ArrayList<Card> myCards;
-	private Set<Card> seenCards;
+	private ArrayList<Card> seenCards;
 	
 	// constructor initializing all of the variable to appropriate values or parameters
 	Player(String s, int r, int c, Color clr){
@@ -24,12 +24,17 @@ public abstract class Player {
 		column = c;
 		color = clr;
 		myCards = new ArrayList<Card>();
-		seenCards = new HashSet<Card>();
+		seenCards = new ArrayList<Card>();
 	}
 	
 	// addCard function adds the parameterized Card to the Player's myCards Set
 	public void addCard(Card c) {
 		myCards.add(c);
+	}
+	
+	// addSeen function adds the card to the seenCards list
+	public void addSeen(Card c) {
+		seenCards.add(c);
 	}
 	
 	// disproveSuggestion function handles how all players will disprove a suggestion
@@ -73,5 +78,8 @@ public abstract class Player {
 	}
 	public ArrayList<Card> getHand() {
 		return myCards;
+	}
+	public ArrayList<Card> getSeenCards() {
+		return seenCards;
 	}
 }
