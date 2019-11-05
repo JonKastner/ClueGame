@@ -70,7 +70,7 @@ public class gameSetupTests {
 	@Test
 	public void testLoadCreateCards() {
 		Set<Card> deck = new HashSet<Card>();
-		Set<Card> subDeck = new HashSet<Card>();
+		ArrayList<Card> subDeck = new ArrayList<Card>();
 		
 		// make sure there are 21 cards in the deck
 		deck = board.getCards();

@@ -16,6 +16,7 @@ public abstract class Player {
 	private Color color;
 	private ArrayList<Card> myCards;
 	private ArrayList<Card> seenCards;
+	private char roomInitial;
 	
 	// constructor initializing all of the variable to appropriate values or parameters
 	Player(String s, int r, int c, Color clr){
@@ -81,5 +82,11 @@ public abstract class Player {
 	}
 	public ArrayList<Card> getSeenCards() {
 		return seenCards;
+	}
+	public void setRoomInitial(char c) {
+		roomInitial = c;
+	}
+	public char getRoomInitial() {
+		return roomInitial;
 	}
 }

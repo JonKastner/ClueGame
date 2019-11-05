@@ -32,7 +32,6 @@ public class Board {
 	private Set<Card> cards;
 	private Set<Card> dealtCards;
 	private ArrayList<Player> players;
-	//private Set<String> weapons;
 	private ArrayList<Card> deck;
 	
 	// variable used for singleton pattern
@@ -371,7 +370,10 @@ public class Board {
 				cards.add(c);
 			}
 			// full deck of cards has been created, copy into the deck arrayList for dealing
-			deck = new ArrayList<Card>(cards);
+			deck = new ArrayList<Card>();
+			for (Card c : cards) {
+				deck.add(c);
+			}
 			// Call selectAnswer method to pick the solution from the deck of cards
 			selectAnswer();
 			// Deal the remaining cards randomly to each player (3 cards per player)
@@ -380,11 +382,15 @@ public class Board {
 					Random rand = new Random();
 					int index = Math.abs(rand.nextInt() % deck.size());
 					Card c = deck.get(index);
+					while (dealtCards.contains(c)) {
+						index = Math.abs(rand.nextInt() % deck.size());
+						c = deck.get(index);
+					}
 					// give card to player
 					p.addCard(c);
 					p.addSeen(c);
 					// remove card from dealing deck
-					deck.remove(c);
+					//deck.remove(c);
 					// add card to the set of dealt cards
 					dealtCards.add(c);
 				}
@@ -419,7 +425,7 @@ public class Board {
 		Card c = subDeck.get(randomNum);
 		theAnswer.room = c.getName();
 		// also remove from dealing deck and add to dealt cards
-		deck.remove(c);
+		//deck.remove(c);
 		dealtCards.add(c);
 		
 		// choose a person card at random, add it to the solution
@@ -427,7 +433,7 @@ public class Board {
 		randomNum = Math.abs(rand.nextInt() % subDeck.size());
 		c = subDeck.get(randomNum);
 		theAnswer.person = c.getName();
-		deck.remove(c);
+		//deck.remove(c);
 		dealtCards.add(c);
 		
 		// choose a weapon card at random, add it to the solution
@@ -435,7 +441,7 @@ public class Board {
 		randomNum = Math.abs(rand.nextInt() % subDeck.size());
 		c = subDeck.get(randomNum);
 		theAnswer.weapon = c.getName();
-		deck.remove(c);
+		//deck.remove(c);
 		dealtCards.add(c);
 	}
 	
@@ -464,6 +470,7 @@ public class Board {
 			// now check the matching cards
 			// if there is one matching card, return it
 			if (matchingCards.size() == 1) {
+				matchingCards.get(0).setSeen(true);
 				return matchingCards.get(0);
 			}
 			// if there are no matching cards, move on to the next player
@@ -474,6 +481,7 @@ public class Board {
 			else {
 				Random rand = new Random();
 				int randomNum = Math.abs(rand.nextInt() % matchingCards.size());
+				matchingCards.get(randomNum).setSeen(true);
 				return matchingCards.get(randomNum);
 			}
 		}
@@ -520,8 +528,8 @@ public class Board {
 	public Set<Card> getCards(){
 		return cards;
 	}
-	public Set<Card> getPlayerCards(){
-		Set<Card> result = new HashSet<Card>();
+	public ArrayList<Card> getPlayerCards(){
+		ArrayList<Card> result = new ArrayList<Card>();
 		for (Card c : cards) {
 			if (c.getType() == CardType.PERSON) {
 				result.add(c);
@@ -529,8 +537,8 @@ public class Board {
 		}
 		return result;
 	}
-	public Set<Card> getWeaponCards(){
-		Set<Card> result = new HashSet<Card>();
+	public ArrayList<Card> getWeaponCards(){
+		ArrayList<Card> result = new ArrayList<Card>();
 		for (Card c : cards) {
 			if (c.getType() == CardType.WEAPON) {
 				result.add(c);
@@ -538,8 +546,8 @@ public class Board {
 		}
 		return result;
 	}
-	public Set<Card> getRoomCards(){
-		Set<Card> result = new HashSet<Card>();
+	public ArrayList<Card> getRoomCards(){
+		ArrayList<Card> result = new ArrayList<Card>();
 		for (Card c : cards) {
 			if (c.getType() == CardType.ROOM) {
 				result.add(c);

@@ -4,6 +4,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.util.Set;
 
 public class HumanPlayer extends Player {
 	
