@@ -439,6 +439,43 @@ public class Board {
 	}
 	
 	public Card handleSuggestion(Player accuser, Solution suggestion) {
+		// set the accuser index to the index of the accusing player in the player list
+		int accuserIndex = players.indexOf(accuser);
+		// set the current index to the index of the player after the accuser
+		int currentIndex = players.indexOf(accuser) + 1;
+		Player player = null;
+		// loop through, iterating the current index until it reaches the accuser index (meaning that nobody can disprove except maybe the accuser)
+		while (currentIndex != accuserIndex) {
+			// if the index goes out of range, reset it to 0
+			if (currentIndex >= players.size()) {
+				currentIndex = 0;
+				continue;
+			}
+			// retrieve the player at the index (the next player in the list)
+			player = players.get(currentIndex);
+			// get any cards that match the suggestion from the player
+			ArrayList<Card> matchingCards = new ArrayList<Card>();
+			for (Card c : player.getHand()) {
+				if (c.getName() == suggestion.person || c.getName() == suggestion.room || c.getName() == suggestion.weapon) {
+					matchingCards.add(c);
+				}
+			}
+			// now check the matching cards
+			// if there is one matching card, return it
+			if (matchingCards.size() == 1) {
+				return matchingCards.get(0);
+			}
+			// if there are no matching cards, move on to the next player
+			else if (matchingCards.size() == 0) {
+				currentIndex++;
+			}
+			// if there are multiple matching cards, return a random one
+			else {
+				Random rand = new Random();
+				int randomNum = Math.abs(rand.nextInt() % matchingCards.size());
+				return matchingCards.get(randomNum);
+			}
+		}
 		return null;
 	}
 	

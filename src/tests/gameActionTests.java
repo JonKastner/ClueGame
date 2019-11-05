@@ -279,23 +279,12 @@ public class gameActionTests {
 	// Test handling a suggestion that nobody can disprove
 	@Test
 	public void TestHandleSuggestionNobodyDisproves() {
-		// make a suggestion
+		// make a suggestion that equals the game's solution
 		Solution suggestion = new Solution();
-		suggestion.person = "Miss Scarlet";
-		suggestion.room = "Conservatory";
-		suggestion.weapon = "Rope";
-		// change the game's answer to match the suggestion
-		board.setAnswer("Miss Scarlet", "Conservatory", "Rope");
-		// remove the matching cards from the players' hands so they can't disprove the suggestion
-		for (Player p : board.getPeople()) {
-			for (Card c : p.getHand()) {
-				// look through everyone's cards. If the card matches the suggestion, remove it from the player's hand
-				if (c.getName() == suggestion.person || c.getName() == suggestion.room || c.getName() == suggestion.weapon) {
-					p.getHand().remove(c);
-				}
-			}
-		}
-		// make sure that the board returns null when handling the suggestion
+		suggestion.person = board.getAnswer().person;
+		suggestion.room = board.getAnswer().room;
+		suggestion.weapon = board.getAnswer().weapon;
+		// make sure that the board returns null when handling the suggestion, picked a random player to provide the suggestion (doesn't change result)
 		assert(board.handleSuggestion(board.getPeople().get(0), suggestion) == null);
 	}
 	
@@ -400,6 +389,7 @@ public class gameActionTests {
 			suggestion.room = board.getAnswer().room;
 		}
 		// make sure that the board handles the suggestion by returning null
+		Card d = board.handleSuggestion(player,  suggestion);
 		assert(board.handleSuggestion(player, suggestion) == null);
 	}
 	
@@ -470,8 +460,8 @@ public class gameActionTests {
 		Player user = null;
 		// pick the user, they will disprove
 		for (Player p : board.getPeople()) {
-			if (p instanceof ComputerPlayer) {
-				player1 = p;
+			if (p instanceof HumanPlayer) {
+				user = p;
 				break;
 			}
 		}
