@@ -390,7 +390,6 @@ public class Board {
 					p.addCard(c);
 					p.addSeen(c);
 					// remove card from dealing deck
-					//deck.remove(c);
 					// add card to the set of dealt cards
 					dealtCards.add(c);
 				}
@@ -425,7 +424,6 @@ public class Board {
 		Card c = subDeck.get(randomNum);
 		theAnswer.room = c.getName();
 		// also remove from dealing deck and add to dealt cards
-		//deck.remove(c);
 		dealtCards.add(c);
 		
 		// choose a person card at random, add it to the solution
@@ -433,7 +431,6 @@ public class Board {
 		randomNum = Math.abs(rand.nextInt() % subDeck.size());
 		c = subDeck.get(randomNum);
 		theAnswer.person = c.getName();
-		//deck.remove(c);
 		dealtCards.add(c);
 		
 		// choose a weapon card at random, add it to the solution
@@ -441,7 +438,6 @@ public class Board {
 		randomNum = Math.abs(rand.nextInt() % subDeck.size());
 		c = subDeck.get(randomNum);
 		theAnswer.weapon = c.getName();
-		//deck.remove(c);
 		dealtCards.add(c);
 	}
 	
@@ -470,7 +466,8 @@ public class Board {
 			// now check the matching cards
 			// if there is one matching card, return it
 			if (matchingCards.size() == 1) {
-				matchingCards.get(0).setSeen(true);
+				//matchingCards.get(0).setSeen(true);
+				accuser.addSeen(matchingCards.get(0));
 				return matchingCards.get(0);
 			}
 			// if there are no matching cards, move on to the next player
@@ -481,7 +478,8 @@ public class Board {
 			else {
 				Random rand = new Random();
 				int randomNum = Math.abs(rand.nextInt() % matchingCards.size());
-				matchingCards.get(randomNum).setSeen(true);
+				//matchingCards.get(randomNum).setSeen(true);
+				accuser.addSeen(matchingCards.get(randomNum));
 				return matchingCards.get(randomNum);
 			}
 		}

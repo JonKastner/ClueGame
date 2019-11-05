@@ -44,12 +44,12 @@ public class ComputerPlayer extends Player {
 		ArrayList<Card> unseenPeople = new ArrayList<Card>();
 		// put every unseen weapon into a list and every unseen person into a list
 		for (Card c : Weapons) {
-			if (c.getSeen() == false && !getSeenCards().contains(c)) {
+			if (!getSeenCards().contains(c)) {
 				unseenWeapons.add(c);
 			}
 		}
 		for (Card c : People) {
-			if (c.getSeen() == false && !getSeenCards().contains(c)) {
+			if (!getSeenCards().contains(c)) {
 				unseenPeople.add(c);
 			}
 		}
