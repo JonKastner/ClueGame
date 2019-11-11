@@ -4,6 +4,8 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
@@ -15,7 +17,9 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Board {
+import javax.swing.JPanel;
+
+public class Board extends JPanel{
 
 	// initialize member variables
 	public static final int MAX_BOARD_SIZE = 50;
@@ -117,7 +121,8 @@ public class Board {
 		// add the boardcells to the 2D array
 		for (int i = 0; i < numColumns; i++) {
 			if (arr[i].length() > 1) {
-				DoorDirection d;
+				DoorDirection d = DoorDirection.NONE;
+				boolean b = false;
 				// switch case to set the door direction
 				switch(arr[i].charAt(1)) {
 				case 'D':
@@ -132,11 +137,12 @@ public class Board {
 				case 'L':
 					d = DoorDirection.LEFT;
 					break;
-				default:
-					d = DoorDirection.NONE;
+				case 'N':
+					b = true;
+					break;
 				}
 				// if the cell has a doorway, use the second constructor
-				board[numRows][i] = new BoardCell(numRows, i, arr[i].charAt(0), d);
+				board[numRows][i] = new BoardCell(numRows, i, arr[i].charAt(0), d, b);
 			} 
 			else {
 				// otherwise use the basic constructor
@@ -159,7 +165,8 @@ public class Board {
 			}
 			for (int i = 0; i < numColumns; i++) {
 				if (arr[i].length() > 1) {
-					DoorDirection d;
+					DoorDirection d = DoorDirection.NONE;
+					boolean b = false;
 					// switch case to set the door direction
 					switch(arr[i].charAt(1)) {
 					case 'D':
@@ -174,11 +181,12 @@ public class Board {
 					case 'L':
 						d = DoorDirection.LEFT;
 						break;
-					default:
-						d = DoorDirection.NONE;
+					case 'N':
+						b = true;
+						break;
 					}
 					// if the cell has a doorway, use the second constructor
-					board[numRows][i] = new BoardCell(numRows, i, arr[i].charAt(0), d);
+					board[numRows][i] = new BoardCell(numRows, i, arr[i].charAt(0), d, b);
 				} 
 				else {
 					// otherwise use the base constructor
@@ -441,6 +449,7 @@ public class Board {
 		dealtCards.add(c);
 	}
 	
+	// handleSuggestion method determines how the board responds to suggestions
 	public Card handleSuggestion(Player accuser, Solution suggestion) {
 		// set the accuser index to the index of the accusing player in the player list
 		int accuserIndex = players.indexOf(accuser);
@@ -486,12 +495,40 @@ public class Board {
 		return null;
 	}
 	
+	// checkAccusation method checks if the accusation is correct
 	public boolean checkAccusation(Solution accusation) {
 		if ((theAnswer.person.equals(accusation.person)) && (theAnswer.room.equals(accusation.room)) && (theAnswer.weapon.equals(accusation.weapon))) {
 			return true;
 		}
 		else {
 			return false;
+		}
+	}
+	
+	// paintComponent method overrides the parent method to draw the gameboard
+	@Override
+	public void paintComponent(Graphics g) {
+		// call the parent method
+		super.paintComponent(g);
+		// convert Graphics object to Graphics2D object
+		Graphics2D g2d = (Graphics2D)g;
+		// go through each boardcell and have them draw themselves
+		for (int r = 0; r < numRows; r++) {
+			for (int c = 0; c < numColumns; c++) {
+				BoardCell cell = getCellAt(r, c);
+				cell.draw(g2d);
+			}
+		}
+		// go through each cell again and if applicable, draw the room names
+		for (int r = 0; r < numRows; r++) {
+			for (int c = 0; c < numColumns; c++) {
+				BoardCell cell = getCellAt(r, c);
+				cell.drawName(g2d, legend);
+			}
+		}
+		// draw all of the players
+		for (Player p : players) {
+			p.draw(g2d);
 		}
 	}
 	

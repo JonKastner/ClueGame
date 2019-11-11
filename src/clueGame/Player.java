@@ -4,6 +4,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -17,6 +18,9 @@ public abstract class Player {
 	private ArrayList<Card> myCards;
 	private ArrayList<Card> seenCards;
 	private char roomInitial;
+	private static int CELL_DIMENSION = 20;
+	private static int CIRCLE_WIDTH = 18;
+	private static int CIRCLE_HEIGHT = 18;
 	
 	// constructor initializing all of the variable to appropriate values or parameters
 	Player(String s, int r, int c, Color clr){
@@ -62,6 +66,14 @@ public abstract class Player {
 			int randomNum = Math.abs(rand.nextInt() % matchingCards.size());
 			return matchingCards.get(randomNum);
 		}
+	}
+	
+	public void draw(Graphics2D g) {
+		g.setColor(color);
+		g.drawOval(column * CELL_DIMENSION + 1, row * CELL_DIMENSION + 1, CIRCLE_WIDTH, CIRCLE_HEIGHT);
+		g.fillOval(column * CELL_DIMENSION + 1, row * CELL_DIMENSION + 1, CIRCLE_WIDTH, CIRCLE_HEIGHT);
+		g.setColor(Color.BLACK);
+		g.drawOval(column * CELL_DIMENSION + 1, row * CELL_DIMENSION + 1, CIRCLE_WIDTH, CIRCLE_HEIGHT);
 	}
 	
 	// Getter and Setters for testing purposes only

@@ -3,6 +3,11 @@
 
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.Map;
+
 public class BoardCell {
 
 	// member variables for row and column
@@ -10,6 +15,11 @@ public class BoardCell {
 	private int column;
 	private char initial;
 	private DoorDirection doorDir;
+	private boolean containsName = false;
+	// constants determining the cell size in pixels when displayed by the board
+	private static int BOX_WIDTH = 20;
+	private static int BOX_HEIGHT = 20;
+	private static int DOOR_THICKNESS = 3;
 	
 	// constructor setting row and column to integer parameters, and initial to z
 	public BoardCell(int x, int y, char z) {
@@ -21,11 +31,12 @@ public class BoardCell {
 	}
 	
 	// constructor specifically for cells that have doors
-	public BoardCell(int x, int y, char z, DoorDirection d) {
+	public BoardCell(int x, int y, char z, DoorDirection d, boolean b) {
 		row = x;
 		column = y;
 		initial = z;
 		doorDir = d;
+		containsName = b;
 	}
 	
 	// isWalkway check method
@@ -57,6 +68,48 @@ public class BoardCell {
 			return false;
 		}
 	}
+	
+	// draw method draws the cell as a rectangle, fills if it is a room, and determines whether or not it should display the room name
+	 public void draw(Graphics2D g) {
+		 // if the cell is part of a room or the closet, gray rectangle
+		 if (isRoom() || initial == 'X') {
+			 g.setColor(Color.LIGHT_GRAY);
+			 g.fillRect(column * BOX_WIDTH, row * BOX_HEIGHT, BOX_WIDTH, BOX_HEIGHT);
+		 }
+		 // if the cell is not a room or closet, yellow outlined rectangle
+		 else {
+			 g.setColor(Color.YELLOW);
+			 g.fillRect(column * BOX_WIDTH, row * BOX_HEIGHT, BOX_WIDTH, BOX_HEIGHT);
+			 g.setColor(Color.BLACK);
+			 g.drawRect(column * BOX_WIDTH, row * BOX_HEIGHT, BOX_WIDTH, BOX_HEIGHT);
+		 }
+		 // deal with doors, doors are blue rectangles on the edge of cells
+		 g.setColor(Color.BLUE);
+		 // if the door opens down
+		 if (doorDir == DoorDirection.DOWN) {
+			 g.fillRect(column * BOX_WIDTH, row * BOX_HEIGHT + (BOX_HEIGHT - DOOR_THICKNESS), BOX_WIDTH, DOOR_THICKNESS);
+		 }
+		// if the door opens up
+		 else if (doorDir == DoorDirection.UP) {
+			 g.fillRect(column * BOX_WIDTH, row * BOX_HEIGHT, BOX_WIDTH, DOOR_THICKNESS);
+		 }
+		// if the door opens left
+		 else if (doorDir == DoorDirection.LEFT) {
+			 g.fillRect(column * BOX_WIDTH, row * BOX_HEIGHT, DOOR_THICKNESS, BOX_HEIGHT);
+		 }
+		// if the door opens right
+		 else if (doorDir == DoorDirection.RIGHT) {
+			 g.fillRect(column * BOX_WIDTH + (BOX_WIDTH - DOOR_THICKNESS), row * BOX_HEIGHT, DOOR_THICKNESS, BOX_HEIGHT);
+		 }
+	 }
+	 
+	 // drawName method draws the name on the cell if the cell has the character 'N'
+	 public void drawName(Graphics2D g, Map<Character, String> m) {
+		 // uses a boolean to check if the cell is '*N'
+		 if (containsName) {
+			 g.drawString(m.get(initial), column * BOX_WIDTH + DOOR_THICKNESS, row * BOX_HEIGHT);
+		 }
+	 }
 
 	// getters for initial and door direction
 	public Object getDoorDirection() {

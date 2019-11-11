@@ -89,7 +89,7 @@ public class BoardTests {
 					numDoors++;
 			}
 		// Check the total number of doors on the board
-		Assert.assertEquals(21, numDoors);
+		Assert.assertEquals(19, numDoors);
 	}
 	
 	// Test some of the rooms' initials
