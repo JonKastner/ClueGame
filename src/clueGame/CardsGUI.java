@@ -5,6 +5,7 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -14,7 +15,15 @@ import javax.swing.border.TitledBorder;
 public class CardsGUI extends JPanel{
 
 	// constructor for the cards GUI, which displays the player's 3 cards
-	public CardsGUI() {
+	public CardsGUI(Board board) {
+		// find the user
+		Player user = null;
+		for (Player p : board.getPeople()) {
+			if (p instanceof HumanPlayer) {
+				user = p;
+				break;
+			}
+		}
 		// set border and layout
 		setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
 		setLayout(new GridLayout(3,0));
@@ -45,6 +54,19 @@ public class CardsGUI extends JPanel{
 		// set to not be editable, add to the panel
 		weaponsField.setEditable(false);
 		weaponsPanel.add(weaponsField);
+		
+		// set the Textfield contents to the user's cards
+		for (Card c : user.getHand()) {
+			if (c.getType() == CardType.PERSON) {
+				peopleField.append(c.getName() + "\n");
+			}
+			else if (c.getType() == CardType.ROOM) {
+				roomsField.append(c.getName() + "\n");
+			}
+			else if (c.getType() == CardType.WEAPON) {
+				weaponsField.append(c.getName() + "\n");
+			}
+		}
 		
 		// add all 3 panels to the CardsGUI panel
 		add(peoplePanel);

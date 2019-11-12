@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
@@ -45,7 +46,7 @@ public class ClueGame extends JFrame{
 		GameControlGUI gui = new GameControlGUI();
 		add(gui, BorderLayout.SOUTH);
 		// create the my_cards panel and add it to the frame
-		CardsGUI myCardsPanel = new CardsGUI();
+		CardsGUI myCardsPanel = new CardsGUI(board);
 		add(myCardsPanel, BorderLayout.EAST);
 		// add the menu bar
 		JMenuBar menuBar = new JMenuBar();
@@ -97,5 +98,16 @@ public class ClueGame extends JFrame{
 		// create the ClueGame object and set it as visible
 		ClueGame game = new ClueGame();
 		game.setVisible(true);
+		// find the user for the option pane
+		Player user = null;
+		for (Player p : board.getPeople()) {
+			if (p instanceof HumanPlayer) {
+				user = p;
+				break;
+			}
+		}
+		// show the option pane when the game is opened
+		JOptionPane welcome = new JOptionPane();
+		welcome.showMessageDialog(game, "You are " + user.getName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 	}
 }
