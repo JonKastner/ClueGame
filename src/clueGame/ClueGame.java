@@ -43,7 +43,7 @@ public class ClueGame extends JFrame{
 		// add the board to the frame
 		add(board, BorderLayout.CENTER);
 		// create the GameControlGUI and add it to the frame
-		GameControlGUI gui = new GameControlGUI();
+		GameControlGUI gui = new GameControlGUI(board);
 		add(gui, BorderLayout.SOUTH);
 		// create the my_cards panel and add it to the frame
 		CardsGUI myCardsPanel = new CardsGUI(board);

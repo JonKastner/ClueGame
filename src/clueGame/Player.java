@@ -22,6 +22,8 @@ public abstract class Player {
 	private static int CIRCLE_WIDTH = 18;
 	private static int CIRCLE_HEIGHT = 18;
 	
+	private boolean hasSelectedTarget = true;
+	
 	// constructor initializing all of the variable to appropriate values or parameters
 	Player(String s, int r, int c, Color clr){
 		playerName = s;
@@ -68,12 +70,26 @@ public abstract class Player {
 		}
 	}
 	
+	// draw method for the players
 	public void draw(Graphics2D g) {
+		// set the color to the player's color, fill a circle
 		g.setColor(color);
 		g.drawOval(column * CELL_DIMENSION + 1, row * CELL_DIMENSION + 1, CIRCLE_WIDTH, CIRCLE_HEIGHT);
 		g.fillOval(column * CELL_DIMENSION + 1, row * CELL_DIMENSION + 1, CIRCLE_WIDTH, CIRCLE_HEIGHT);
+		// set the color to black, create a boundary circle for the player
 		g.setColor(Color.BLACK);
 		g.drawOval(column * CELL_DIMENSION + 1, row * CELL_DIMENSION + 1, CIRCLE_WIDTH, CIRCLE_HEIGHT);
+	}
+	
+	// abstract method for making the player's move, only used by the computerplayer
+	public abstract void makeMove(Board board);
+		
+	// getter and setter for the player's hasSelectedTarget boolean
+	public boolean getSelectedStatus() {
+		return hasSelectedTarget;
+	}
+	public void setSelectedStatus(boolean b) {
+		hasSelectedTarget = b;
 	}
 	
 	// Getter and Setters for testing purposes only
@@ -100,5 +116,9 @@ public abstract class Player {
 	}
 	public char getRoomInitial() {
 		return roomInitial;
+	}
+	public void setLocation(int r, int c) {
+		row = r;
+		column = c;
 	}
 }

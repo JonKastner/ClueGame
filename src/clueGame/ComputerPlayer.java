@@ -18,16 +18,21 @@ public class ComputerPlayer extends Player {
 		recentRoom = ' ';
 	}
 	
+	// pick locwtion for the computer player
 	public BoardCell pickLocation(Set<BoardCell> targets) {
 		ArrayList targetList = new ArrayList<BoardCell>(targets);
 		BoardCell target = null;
+		// for every cell inhe target list
 		for (BoardCell c : targets) {
+			// if the cell is an unvisited room, enter it
 			if ((c.isRoom()) && (!c.getInitial().equals(recentRoom))) {
 				target = c;
 				setRoomInitial((char) c.getInitial());
+				setRecentRoom((char) c.getInitial());
 				return target;
 			}
 		}
+		// otherwise, pick from random
 		Random rand = new Random();
 		int index = Math.abs(rand.nextInt() % targets.size());
 		target = (BoardCell) targetList.get(index);
@@ -38,6 +43,7 @@ public class ComputerPlayer extends Player {
 		return null;
 	}
 	
+	// create Suggestion method for the computer player
 	public Solution createSuggestion(ArrayList<Card> People, ArrayList<Card> Weapons) {
 		Solution suggestion = new Solution();
 		ArrayList<Card> unseenWeapons = new ArrayList<Card>();
@@ -107,6 +113,15 @@ public class ComputerPlayer extends Player {
 		return suggestion;
 	}
 	
+	// overridden method for makeMove, used to move the computerplayer
+	@Override
+	public void makeMove(Board board) {
+		// pick a location, and move the player to that location
+		BoardCell c = pickLocation(board.getTargets());
+		super.setLocation(c.getRow(), c.getCol());
+	}
+	
+	// setter for the recent room character
 	public void setRecentRoom(char c) {
 		recentRoom = c;
 	}

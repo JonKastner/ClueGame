@@ -60,9 +60,9 @@ public class AdjacencyTests {
 		Set<BoardCell> list = new HashSet<BoardCell>();
 		
 		// cell with door direction RIGHT
-		list = board.getAdjList(20, 6);
+		list = board.getAdjList(5, 2);
 		assertEquals(1, list.size());
-		assert(list.contains(board.getCellAt(20, 7)));
+		assert(list.contains(board.getCellAt(5, 3)));
 		
 		// cell with door direction LEFT
 		list = board.getAdjList(4, 11);
@@ -92,8 +92,7 @@ public class AdjacencyTests {
 		
 		// cell to the right of door direction RIGHT
 		list = board.getAdjList(20, 7);
-		assertEquals(4, list.size());
-		assert(list.contains(board.getCellAt(20, 6)));
+		assertEquals(3, list.size());
 		assert(list.contains(board.getCellAt(20, 8)));
 		assert(list.contains(board.getCellAt(19, 7)));
 		assert(list.contains(board.getCellAt(21, 7)));

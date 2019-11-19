@@ -44,7 +44,7 @@ public class gameSetupTests {
 		assertEquals("Colonel Mustard", p.getName());
 		assertEquals(0, p.getRow());
 		assertEquals(4, p.getCol());
-		assertEquals(Color.YELLOW, p.getColor());
+		assertEquals(Color.ORANGE, p.getColor());
 		assert(p instanceof HumanPlayer);
 		
 		// Test the human player's values

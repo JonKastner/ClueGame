@@ -6,6 +6,8 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
@@ -17,9 +19,10 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Board extends JPanel{
+public class Board extends JPanel implements MouseListener{
 
 	// initialize member variables
 	public static final int MAX_BOARD_SIZE = 50;
@@ -38,10 +41,14 @@ public class Board extends JPanel{
 	private ArrayList<Player> players;
 	private ArrayList<Card> deck;
 	
+	private Player currentPlayer = null;
+	
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
 	// constructor is private to ensure only one can be created
-	private Board() {}
+	private Board() {
+		addMouseListener(this);
+	}
 	// this method returns the only Board
 	public static Board getInstance() {
 		return theInstance;
@@ -532,6 +539,107 @@ public class Board extends JPanel{
 		}
 	}
 	
+	// methods for the MouseListener object, we only use clicked
+	public void mousePressed(MouseEvent event) {}
+	public void mouseReleased(MouseEvent event) {}
+	public void mouseEntered(MouseEvent event) {}
+	public void mouseExited(MouseEvent event) {}
+	@Override
+	public void mouseClicked(MouseEvent event) {
+		// only the human player should interact with the board
+		if (currentPlayer instanceof HumanPlayer) {
+			// get the x and y placement of the mouse click
+			int x = event.getPoint().x;
+			int y = event.getPoint().y;
+			boolean check = false;
+			// loop through every cell in targets
+			for (BoardCell cell : targets) {
+				// find the cell that the click was inside of
+				if ((x > cell.getCol() * cell.getBoxWidth()) && (x < cell.getCol() * cell.getBoxWidth() + cell.getBoxWidth())) {
+					if ((y > cell.getRow() * cell.getBoxHeight()) && (y < cell.getRow() * cell.getBoxHeight() + cell.getBoxHeight())) {
+						// set the player's location to that cell
+						currentPlayer.setLocation(cell.getRow(), cell.getCol());
+						check = true;
+						// indicate that the player has selected a target
+						currentPlayer.setSelectedStatus(true);
+						// update the board display
+						repaint();
+					}
+				}
+			}
+			// show error message if an invalid target is selected
+			if (check == false) {
+				JOptionPane error = new JOptionPane();
+				error.showMessageDialog(this, "Error, invalid target selected!", "ERROR", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
+	// sets the current player
+	public void setCurrentPlayer() {
+		// if the current player is null (when the game first starts), set it to the human player
+		if (currentPlayer == null) {
+			for (Player p : players) {
+				if (p instanceof HumanPlayer) {
+					currentPlayer = p;
+					break;
+				}
+			}
+		}
+		// otherwise, make the current player the next player in the list
+		else {
+			int index = players.indexOf(currentPlayer);
+			if (index == players.size() - 1) {
+				currentPlayer = players.get(0);
+			}
+			else {
+				currentPlayer = players.get(index + 1);
+			}
+		}
+	}
+	
+	// method containing the code ran when clicking the next player button
+	public void nextPlayerClicked(GameControlGUI gui) {
+		// if the current player is the user and they haven't selected a target, return
+		if (currentPlayer instanceof HumanPlayer) {
+			if (currentPlayer.getSelectedStatus() == false) {
+				return;
+			}
+			else {
+				// if the current player is a human player and they selected a target, reset the status to false before changing player
+				currentPlayer.setSelectedStatus(false);
+			}
+		}
+		// move to the next player
+		setCurrentPlayer();
+		// roll die
+		Random rand = new Random();
+		int roll = rand.nextInt((6 - 1) + 1) + 1;
+		calcTargets(currentPlayer.getRow(), currentPlayer.getCol(), roll);
+		// update game control
+		gui.setTurn(currentPlayer.getName());
+		gui.setRoll(roll);
+		gui.setGuess("");
+		gui.setResult("");
+		// if the current player is the user, highlight targets
+		if (currentPlayer instanceof HumanPlayer) {
+			// highlight targets
+			Graphics g = getGraphics();
+			Graphics2D g2d = (Graphics2D)g;
+			for (BoardCell cell : getTargets()) {
+				cell.drawTarget(g2d);
+			}
+		}
+		// if the current player is a computer, make their move and update the board
+		else {
+			currentPlayer.makeMove(this);
+			repaint();
+		}
+	}
+	public void makeAccusationClicked() {
+		
+	}
+	
 	// setters and getters
 	public void setConfigFiles(String boardConfigFile, String roomConfigFile) {
 		this.boardConfigFile = boardConfigFile;
@@ -601,5 +709,4 @@ public class Board extends JPanel{
 		theAnswer.room = r;
 		theAnswer.weapon = w;
 	}
-	
 }

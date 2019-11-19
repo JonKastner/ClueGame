@@ -79,6 +79,7 @@ public class gameActionTests {
 		boolean loc_6_7 = false;
 		// run 10 trials, the room should be picked every single time
 		for (int i = 0; i < 10; i++) {
+			player.setRecentRoom(' ');
 			BoardCell target = player.pickLocation(board.getTargets());
 			if (target == board.getCellAt(5, 6)) {
 				loc_5_6 = true;

@@ -103,6 +103,15 @@ public class BoardCell {
 		 }
 	 }
 	 
+	 // draw target method is called if the cell is one of the user's targets
+	 public void drawTarget(Graphics2D g) {
+		 // replace the yellow square with a cyan one
+		 g.setColor(Color.CYAN);
+		 g.fillRect(column * BOX_WIDTH, row * BOX_HEIGHT, BOX_WIDTH, BOX_HEIGHT);
+		 g.setColor(Color.BLACK);
+		 g.drawRect(column * BOX_WIDTH, row * BOX_HEIGHT, BOX_WIDTH, BOX_HEIGHT);
+	 }
+	 
 	 // drawName method draws the name on the cell if the cell has the character 'N'
 	 public void drawName(Graphics2D g, Map<Character, String> m) {
 		 // uses a boolean to check if the cell is '*N'
@@ -117,5 +126,17 @@ public class BoardCell {
 	}
 	public Object getInitial() {
 		return initial;
+	}
+	public int getRow() {
+		return row;
+	}
+	public int getCol() {
+		return column;
+	}
+	public int getBoxWidth() {
+		return BOX_WIDTH;
+	}
+	public int getBoxHeight() {
+		return BOX_HEIGHT;
 	}
 }
