@@ -17,40 +17,9 @@ public class HumanPlayer extends Player {
 		super.setSelectedStatus(false);
 	}
 
+	// overridden makeMove method, not used by the human player, but skeleton function is required
 	@Override
-	public void makeMove(Board board) {
+	public void makeMove(Board board, GameControlGUI gui) {
 		return;
 	}
-	
-	/*private class TargetListener implements MouseListener {
-		
-		public Set<BoardCell> set;
-		public HumanPlayer player;
-		
-		TargetListener(Set<BoardCell> targets, HumanPlayer p){
-			set = targets;
-			player = p;
-		}
-		
-		public void mousePressed(MouseEvent event) {}
-		
-		public void mouseReleased(MouseEvent event) {}
-		
-		public void mouseEntered(MouseEvent event) {}
-		
-		public void mouseExited(MouseEvent event) {}
-		
-		public void mouseClicked(MouseEvent event) {
-			int x = event.getPoint().x;
-			int y = event.getPoint().y;
-			for (BoardCell cell : set) {
-				if ((x > cell.getCol() * cell.getBoxWidth()) && (x < cell.getCol() * cell.getBoxWidth() + cell.getBoxWidth())) {
-					if ((y > cell.getRow() * cell.getBoxHeight()) && (y < cell.getRow() * cell.getBoxHeight() + cell.getBoxHeight())) {
-						player.setLocation(cell.getRow(), cell.getCol());
-						break;
-					}
-				}
-			}
-		}
-	}*/
 }

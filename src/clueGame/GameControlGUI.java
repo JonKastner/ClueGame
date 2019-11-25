@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 
 public class GameControlGUI extends JPanel {
 	
+	// declare instance variables
 	private JTextField turnDisplay;
 	private JTextField rollDisplay;
 	private JTextField guessDisplay;

@@ -1,0 +1,141 @@
+Authors: Jonathon Kastner, Gavin Webster
+
+Most Significant Change: Putting RoomConfig code all in try-catch to increase efficiency
+BEFORE:
+Scanner scan = null;
+try {
+	Scanner scan = new Scanner(in);
+} catch (FileNotFoundException e) {
+	System.out.println("File does not exist!");
+}
+String line = "";
+// get each line, split it up, trim off leading/trailing whitespace
+while(scan.hasNextLine()) {
+	line = scan.nextLine();
+	String[] arr = line.split(",", 0);
+	for (int i = 0; i < arr.length; i++) {
+		arr[i] = arr[i].trim();
+	}
+	if ((arr.length > 3) || (arr.length == 0)) {
+		throw new BadConfigFormatException("Error: Incorrect legend file format!");
+	}
+	else if ((!arr[2].equals("Card")) && (!arr[2].equals("Other"))){
+		throw new BadConfigFormatException("Error: Incorrect legend file format!");
+	}
+	// add to legend map
+	legend.put(arr[0].charAt(0), arr[1]);
+}
+AFTER:
+try {
+	Scanner scan = new Scanner(in);
+	String line = "";
+	// get each line, split it up, trim off leading/trailing whitespace
+	while(scan.hasNextLine()) {
+		line = scan.nextLine();
+		String[] arr = line.split(",", 0);
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = arr[i].trim();
+		}
+		if ((arr.length > 3) || (arr.length == 0)) {
+			throw new BadConfigFormatException("Error: Incorrect legend file format!");
+		}
+		else if ((!arr[2].equals("Card")) && (!arr[2].equals("Other"))){
+			throw new BadConfigFormatException("Error: Incorrect legend file format!");
+		}
+		// add to legend map
+		legend.put(arr[0].charAt(0), arr[1]);
+	}		
+} catch (FileNotFoundException e) {
+	System.out.println("File does not exist!");
+}
+
+
+commit 178f3672567631c80a4dee58b48ac9953a1e5d2c
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 24 11:41:21 2019 -0600
+
+    Fixed problem where Board was referencing experiment.BoardCell instead of clueGame.BoardCell
+
+commit 5cfe3005f0fe3809adaa5c2467b702faff1ab134
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 24 11:32:59 2019 -0600
+
+    Refactored name of BoardCell variable door to doorDir for clarity
+
+commit 7239d7a10fc9539720e55685a86c92a5000c6f71
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 24 11:30:48 2019 -0600
+
+    Fixed loadRoomConfig placing entire map population block inside of try-catch for program efficiency
+
+commit 03d8d1a113390a5f2d5d8cb76cc773f94adbb396
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 24 11:27:16 2019 -0600
+
+    Added spacing and more descriptive comments to AdjacencyTests.java for clarity
+
+commit 52b888a8e9a4a53c3727094e5a4e7bd5b04968e4
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 24 11:25:05 2019 -0600
+
+    Fixed spacing for conditional statements for consistency in Board.java
+
+commit 36fe582e30b99c66adaf325c6d58fc585b3aa2d6
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 24 11:22:20 2019 -0600
+
+    More descriptive comments on the Board initalize method
+
+commit 50c1c12d5ff1e9d61bf87248f802cbb09c70251e
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 24 11:20:55 2019 -0600
+
+    Changed door direction assignment from if statement to switch case
+
+commit b5e56b90c18e4d808a7212f80862ff0c9b1d378f
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 24 11:18:08 2019 -0600
+
+    Altered base constructor for BadConfigFormatException
+
+commit 7767dc8bf6658e636415956f1442a1038525595f
+Author: Jon <jkastner@mymail.mines.edu>
+Date:   Wed Oct 23 20:29:37 2019 -0600
+
+    C16A2 Complete, All Adjacency Tests Pass
+
+commit 548c75f6fda0026be5e7f057046277bcdc6a7ad6
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Tue Oct 22 14:46:49 2019 -0600
+
+    C16A1 Complete, Adjacency Tests Fail
+
+commit 319dea59e18a0fec2dafa2a1abca6626742651e1
+Author: Jon <jkastner@mymail.mines.edu>
+Date:   Wed Oct 16 23:22:47 2019 -0600
+
+    C13A2 Complete, all board and exception tests pass
+
+commit 0055183689e5cdaedb205ba83e1f454e2fcebbfa
+Author: Jon <jkastner@mymail.mines.edu>
+Date:   Mon Oct 7 13:37:31 2019 -0600
+
+    Part 3 Complete, all board tests fail
+
+commit 8d56391906677a1bd3ae5977e4c8199207d8b655
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Sun Oct 6 13:03:55 2019 -0600
+
+    Part 2 Complete, all tests pass
+
+commit 6a9d5e1c1a31ea31b4ba4b47806e81c51d49cf85
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Thu Oct 3 11:26:01 2019 -0600
+
+    Part 1 Complete, all tests fail
+
+commit 20298000d8a74549bedc24f1d99d607f3edcdf68
+Author: Jonathon Kastner <jkastner@mines.edu>
+Date:   Tue Oct 1 12:08:33 2019 -0600
+
+    Initial Commit

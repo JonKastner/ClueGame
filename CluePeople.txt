@@ -1,0 +1,6 @@
+Colonel Mustard, ORANGE, Human, 0, 4
+Miss Scarlet, RED, Computer, 16, 0
+Mr. Green, GREEN, Computer, 23, 7
+Mrs. Peacock, BLUE, Computer, 17, 23
+Mrs. White, WHITE, Computer, 0, 10
+Professor Plum, MAGENTA, Computer, 0, 19

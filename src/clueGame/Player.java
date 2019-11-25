@@ -21,7 +21,6 @@ public abstract class Player {
 	private static int CELL_DIMENSION = 20;
 	private static int CIRCLE_WIDTH = 18;
 	private static int CIRCLE_HEIGHT = 18;
-	
 	private boolean hasSelectedTarget = true;
 	
 	// constructor initializing all of the variable to appropriate values or parameters
@@ -50,7 +49,7 @@ public abstract class Player {
 		ArrayList<Card> matchingCards = new ArrayList<Card>();
 		for (Card c : myCards) {
 			// if the card shares the same name as any part of the solution, add to the matching cards list
-			if (c.getName() == suggestion.person || c.getName() == suggestion.room || c.getName() == suggestion.weapon) {
+			if (c.getName().equals(suggestion.person) || c.getName().equals(suggestion.room) || c.getName().equals(suggestion.weapon)) {
 				matchingCards.add(c);
 			}
 		}
@@ -82,7 +81,7 @@ public abstract class Player {
 	}
 	
 	// abstract method for making the player's move, only used by the computerplayer
-	public abstract void makeMove(Board board);
+	public abstract void makeMove(Board board, GameControlGUI gui);
 		
 	// getter and setter for the player's hasSelectedTarget boolean
 	public boolean getSelectedStatus() {

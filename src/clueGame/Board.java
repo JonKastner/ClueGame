@@ -40,8 +40,8 @@ public class Board extends JPanel implements MouseListener{
 	private Set<Card> dealtCards;
 	private ArrayList<Player> players;
 	private ArrayList<Card> deck;
-	
 	private Player currentPlayer = null;
+	private GameControlGUI gameGUI;
 	
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -427,7 +427,6 @@ public class Board extends JPanel implements MouseListener{
 		 return color;
 		}
 
-	
 	// selectAnswer method picks 3 cards for the solution before dealing the other cards to players
 	public void selectAnswer() {
 		theAnswer = new Solution();
@@ -475,14 +474,13 @@ public class Board extends JPanel implements MouseListener{
 			// get any cards that match the suggestion from the player
 			ArrayList<Card> matchingCards = new ArrayList<Card>();
 			for (Card c : player.getHand()) {
-				if (c.getName() == suggestion.person || c.getName() == suggestion.room || c.getName() == suggestion.weapon) {
+				if (c.getName().equals(suggestion.person) || c.getName().equals(suggestion.room) || c.getName().equals(suggestion.weapon)) {
 					matchingCards.add(c);
 				}
 			}
 			// now check the matching cards
 			// if there is one matching card, return it
 			if (matchingCards.size() == 1) {
-				//matchingCards.get(0).setSeen(true);
 				accuser.addSeen(matchingCards.get(0));
 				return matchingCards.get(0);
 			}
@@ -494,7 +492,6 @@ public class Board extends JPanel implements MouseListener{
 			else {
 				Random rand = new Random();
 				int randomNum = Math.abs(rand.nextInt() % matchingCards.size());
-				//matchingCards.get(randomNum).setSeen(true);
 				accuser.addSeen(matchingCards.get(randomNum));
 				return matchingCards.get(randomNum);
 			}
@@ -562,8 +559,15 @@ public class Board extends JPanel implements MouseListener{
 						check = true;
 						// indicate that the player has selected a target
 						currentPlayer.setSelectedStatus(true);
+						// if the player is now in a room, then prompt to make a suggestion
+						if (cell.isRoom()) {
+							// create the suggestion dialog and set visible
+							SuggestionDialog suggest = new SuggestionDialog(cell, this, currentPlayer, gameGUI);
+							suggest.setVisible(true);
+						}
 						// update the board display
 						repaint();
+						break;
 					}
 				}
 			}
@@ -600,6 +604,7 @@ public class Board extends JPanel implements MouseListener{
 	
 	// method containing the code ran when clicking the next player button
 	public void nextPlayerClicked(GameControlGUI gui) {
+		gameGUI = gui;
 		// if the current player is the user and they haven't selected a target, return
 		if (currentPlayer instanceof HumanPlayer) {
 			if (currentPlayer.getSelectedStatus() == false) {
@@ -632,12 +637,23 @@ public class Board extends JPanel implements MouseListener{
 		}
 		// if the current player is a computer, make their move and update the board
 		else {
-			currentPlayer.makeMove(this);
+			currentPlayer.makeMove(this, gui);
 			repaint();
 		}
 	}
+	
+	// method controlling what happens when the 'Make Accusation' button is pressed
 	public void makeAccusationClicked() {
-		
+		// if the current player is the user, prompt for making an accusation
+		if (currentPlayer instanceof HumanPlayer) {
+			AccusationDialog accuse = new AccusationDialog(this, currentPlayer);
+			accuse.setVisible(true);
+		}
+		// if the current player is a computer, show an error message
+		else {
+			JOptionPane error = new JOptionPane();
+			error.showMessageDialog(this, "Error, Can not make an accusation on Computer turn", "ERROR", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	// setters and getters

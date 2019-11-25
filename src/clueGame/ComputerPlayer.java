@@ -11,18 +11,21 @@ import java.util.Set;
 public class ComputerPlayer extends Player {
 	
 	private char recentRoom;
+	private boolean shouldMakeAccusation;
+	private Solution accusationHolder;
 	
 	// Constructor calling the parent constructor
 	public ComputerPlayer(String s, int r, int c, Color clr){
 		super(s, r, c, clr);
 		recentRoom = ' ';
+		shouldMakeAccusation = false;
 	}
 	
-	// pick locwtion for the computer player
+	// pick location for the computer player
 	public BoardCell pickLocation(Set<BoardCell> targets) {
 		ArrayList targetList = new ArrayList<BoardCell>(targets);
 		BoardCell target = null;
-		// for every cell inhe target list
+		// for every cell in the target list
 		for (BoardCell c : targets) {
 			// if the cell is an unvisited room, enter it
 			if ((c.isRoom()) && (!c.getInitial().equals(recentRoom))) {
@@ -39,8 +42,10 @@ public class ComputerPlayer extends Player {
 		return target;
 	}
 	
+	// handles how the computer player makes an accusation
 	public Solution makeAccusation() {
-		return null;
+		// return the accusation variable
+		return accusationHolder;
 	}
 	
 	// create Suggestion method for the computer player
@@ -115,10 +120,68 @@ public class ComputerPlayer extends Player {
 	
 	// overridden method for makeMove, used to move the computerplayer
 	@Override
-	public void makeMove(Board board) {
-		// pick a location, and move the player to that location
+	public void makeMove(Board board, GameControlGUI gui) {
+		// if the player should make an accusation, make and check that accusation
+		if (shouldMakeAccusation == true) {
+			board.checkAccusation(makeAccusation());
+			// create the result dialog and set the values
+			ResultDialog result = new ResultDialog();
+			result.setPlayerLabel(super.getName());
+			String str = accusationHolder.person + ", " + accusationHolder.room + ", " + accusationHolder.weapon;
+			result.setAccusationLabel(str);
+			// check and set the result of the accusation
+			if (board.checkAccusation(accusationHolder) == true) {
+				result.setResultLabel("Correct");
+			}
+			else {
+				result.setResultLabel("Incorrect");
+			}
+			result.setVisible(true);
+			// if the accusation is false, need to reset the boolean so that they don't keep making accusations
+			shouldMakeAccusation = false;
+			return;
+		}
+		// otherwise pick a location, and move the player to that location
 		BoardCell c = pickLocation(board.getTargets());
 		super.setLocation(c.getRow(), c.getCol());
+		// if the new cell is a room, then make a suggestion
+		if (c.isRoom()) {
+			// make suggestion
+			Solution suggestion = createSuggestion(board.getPlayerCards(), board.getWeaponCards());
+			// update the guess field in the GUI
+			String guess = suggestion.person + ", " + suggestion.room + ", " + suggestion.weapon;
+			gui.setGuess(guess);
+			// have the board handle the suggestion and update the result field
+			// if the suggestion is not disproved:
+			if (board.handleSuggestion(this, suggestion) == null) {
+				boolean hasRoom = false;
+				// check if the computer player's cards contain the suggestion's room
+				for (Card card : super.getHand()) {
+					if (card.getName().equals(suggestion.room)) {
+						hasRoom = true;
+					}
+				}
+				// if the player doesn't have the card for the room
+				if (hasRoom == false) {
+					// indicate that the suggestion is the next accusation
+					shouldMakeAccusation = true;
+					accusationHolder = suggestion;
+					// update result display
+					gui.setResult("Nobody Disproves");
+				}
+			}
+			// if the suggestion is disproved, indicate that it was disproved
+			else {
+				gui.setResult("Disproved by Player");
+				// move the suggested player to the room
+				for (Player p : board.getPeople()) {
+					if (p.getName().equals(suggestion.person)) {
+						p.setLocation(super.getRow(), super.getCol());
+						break;
+					}
+				}
+			}
+		}
 	}
 	
 	// setter for the recent room character

@@ -1,0 +1,6 @@
+Gun
+Knife
+Rope
+Crowbar
+Shovel
+Poison
